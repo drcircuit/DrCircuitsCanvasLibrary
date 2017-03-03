@@ -12,7 +12,7 @@
     "Utility"
   ],
   "license": "MIT",
-  "homepage": "http://workingclasshacker.net",
+  "homepage": "https://github.com/drcircuit/DrCircuitsCanvasLibrary",
   "ignore": [
     "**/.*",
     "node_modules",
