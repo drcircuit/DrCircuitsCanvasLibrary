@@ -1,0 +1,23 @@
+{
+  "name": "DrCircuitsCanvasLibrary",
+  "authors": [
+    "workingclasshacker@gmail.com"
+  ],
+  "description": "A small utility library I made for myself to help create canvas based projects.",
+  "main": "dcl.js",
+  "keywords": [
+    "Canvas",
+    "HTML",
+    "Helper",
+    "Utility"
+  ],
+  "license": "MIT",
+  "homepage": "http://workingclasshacker.net",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
