@@ -30,6 +30,9 @@ var dcl    = {
             height: canvas.height,
             cols: cols,
             rows: rows,
+            setBgColor: function(color){
+              canvas.style.backgroundColor = color;
+            },
             randomSpot: function () {
                 return vector.creteVector(Math.floor(Math.random() * cols), Math.floor(Math.random() * rows));
             }
