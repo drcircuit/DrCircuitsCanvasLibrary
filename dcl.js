@@ -78,3 +78,39 @@ var vector = {
         };
     }
 };
+
+dcl.random = function(min,max){
+    return Math.floor(Math.random()*(max-min) + min);
+};
+
+dcl.rect = function(ctx,x,y,width,height, color, lineWidth, lineColor){
+    height = height || width;
+    ctx.fillStyle = color || "blue";
+    ctx.fillRect(x,y,width, height);
+    if(lineWidth){
+        lineColor = lineColor || "#000088";
+        ctx.strokeStyle = lineColor;
+        ctx.lineWidth = lineWidth;
+        ctx.strokeRect(x,x,width,height);
+    }
+};
+dcl.circle = function(ctx,x,y,radius,color,lineWidth, lineColor){
+    color = color || "blue";
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x,y,radius, 0, 360 * Math.PI/180);
+    ctx.fill();
+    if(lineWidth){
+        ctx.lineWidth = lineWidth;
+        ctx.outlineStyle = lineColor || "#000088";
+        ctx.stroke();
+    }
+    ctx.closePath();
+};
+dcl.draw = draw;
+dcl.update = update;
+dcl.animate = function(){
+    dcl.draw();
+    dcl.update();
+    requestAnimationFrame(animate);
+};
