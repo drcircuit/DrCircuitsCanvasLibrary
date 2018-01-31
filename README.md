@@ -38,3 +38,57 @@ This method returns an object with the following:
 * setBgColor: function(color): sets the background color of the canvas
 * randomSpot: function(): retrieves a random spot from the grid, returns a vector x, y
 
+# dcl.random function
+dcl.random: function(min, max)
+## Parameters:
+* min: the minimum desired number of the random range.
+& max: the maximum desired number of the random range.
+
+## return object:
+This method returns a random integer between the given min / max values passed to the function.
+
+# dcl.rect function
+dcl.rect: function(ctx, x, y, width, height, color, lineWidth, lineColor)
+
+## Parameters:
+* ctx: The canvas context to draw the rectangle on.
+* x: the x position of the upper left corner of the rectangle
+* y: the y position of the upper left corner of the rectangle
+* width: the width of the rectangle
+* height: the height of the rectangle, if 0 or no value is provided, a square with a side length equal to the "width" parameter will be drawn
+* color: the fill color of the rectangle, defaults to "blue" if no input is given.
+* lineWidth: The width of the stroke around the perimeter : optional
+* lineColor: The color of the stroke around the perimeter, defaults to "#000088" if no input is given : optional
+
+## void
+This method draws a rectangle based on the given parameters.
+
+# dcl.circle function
+dcl.circle: function(ctx, x, y, radius, color, lineWidth, lineColor)
+
+## Parameters:
+* ctx: The canvas context to draw the circle on.
+* x: the x position of the center of the circle
+* y: the y position of the center of the circle
+* radius: the radius of the circle
+* color: the fill color of the circle, defaults to "blue" if no input is given.
+* lineWidth: The width of the stroke around the perimeter : optional
+* lineColor: The color of the stroke around the perimeter, defaults to "#000088" if no input is given : optional
+
+## void
+This method draws a circle based on the given parameters.
+
+# dcl.line function
+dcl.circle: function(ctx, x, y, dx, dy, lineWidth, lineColor)
+
+## Parameters:
+* ctx: The canvas context to draw the circle on.
+* x: the x position of the start of the line
+* y: the y position of the start of the line
+* dx: the x position of the end of the line
+* dy: the y position of the end of the line
+* lineWidth: The width of the stroke around the perimeter : optional
+* lineColor: The color of the stroke around the perimeter, defaults to "#000088" if no input is given : optional
+
+## void
+This method draws a line based on the given parameters.
