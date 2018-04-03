@@ -48,10 +48,9 @@ dcl.random: function(min, max)
 This method returns a random integer between the given min / max values passed to the function.
 
 # dcl.rect function
-dcl.rect: function(ctx, x, y, width, height, color, lineWidth, lineColor)
+dcl.rect: function(x, y, width, height, color, lineWidth, lineColor, ctx)
 
 ## Parameters:
-* ctx: The canvas context to draw the rectangle on.
 * x: the x position of the upper left corner of the rectangle
 * y: the y position of the upper left corner of the rectangle
 * width: the width of the rectangle
@@ -59,36 +58,46 @@ dcl.rect: function(ctx, x, y, width, height, color, lineWidth, lineColor)
 * color: the fill color of the rectangle, defaults to "blue" if no input is given.
 * lineWidth: The width of the stroke around the perimeter : optional
 * lineColor: The color of the stroke around the perimeter, defaults to "#000088" if no input is given : optional
+* ctx: The canvas context to draw the circle on : optional.
 
 ## void
 This method draws a rectangle based on the given parameters.
 
 # dcl.circle function
-dcl.circle: function(ctx, x, y, radius, color, lineWidth, lineColor)
+dcl.circle: function(x, y, radius, color, lineWidth, lineColor, ctx)
 
 ## Parameters:
-* ctx: The canvas context to draw the circle on.
+
 * x: the x position of the center of the circle
 * y: the y position of the center of the circle
 * radius: the radius of the circle
 * color: the fill color of the circle, defaults to "blue" if no input is given.
 * lineWidth: The width of the stroke around the perimeter : optional
 * lineColor: The color of the stroke around the perimeter, defaults to "#000088" if no input is given : optional
+* ctx: The canvas context to draw the circle on : optional.
 
 ## void
 This method draws a circle based on the given parameters.
 
 # dcl.line function
-dcl.circle: function(ctx, x, y, dx, dy, lineWidth, lineColor)
+dcl.circle: function(x, y, dx, dy, lineWidth, lineColor, ctx)
 
 ## Parameters:
-* ctx: The canvas context to draw the circle on.
 * x: the x position of the start of the line
 * y: the y position of the start of the line
 * dx: the x position of the end of the line
 * dy: the y position of the end of the line
 * lineWidth: The width of the stroke around the perimeter : optional
 * lineColor: The color of the stroke around the perimeter, defaults to "#000088" if no input is given : optional
+* ctx: The canvas context to draw the circle on : optional.
 
 ## void
 This method draws a line based on the given parameters.
+
+# draw or dcl.draw function
+the function that will be called in the render loop once dcl.animate is called.
+This function is implemented by you.
+
+# dcl.animate function
+This function starts the render loop.
+
