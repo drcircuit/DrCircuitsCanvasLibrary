@@ -72,7 +72,9 @@ dcl.const = {
     phi: (1 + Math.sqrt(5)) / 2,
     iphi: 2 / (1 + Math.sqrt(5)),
     pi: Math.PI,
-    e: Math.E
+    e: Math.E,
+    r2: Math.sqrt(2),
+    ir2: 1 / Math.sqrt(2)
 };
 dcl.rad = function (deg) {
     return deg * Math.PI / 180;
