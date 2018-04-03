@@ -1,10 +1,10 @@
 /**
  * Created by Espen on 03.03.2017.
  */
-var dcl    = function () {
+var dcl = function () {
 
     function setCanvasSize(canvas, width, height, keepSquare) {
-        canvas.width  = width || window.innerWidth;
+        canvas.width = width || window.innerWidth;
         canvas.height = height || window.innerHeight;
         if (keepSquare) {
             if (canvas.width < canvas.height) {
@@ -16,15 +16,15 @@ var dcl    = function () {
     }
 
     function setCanvasStyle(canvas, width, height) {
-        canvas.style.padding  = 0;
-        canvas.style.margin   = 'auto';
+        canvas.style.padding = 0;
+        canvas.style.margin = 'auto';
         canvas.style.position = 'absolute';
-        canvas.style.top      = 0;
-        canvas.style.left     = 0;
-        canvas.style.right    = 0;
-        canvas.style.bottom   = 0;
-        canvas.style.width    = width;
-        canvas.style.height   = height;
+        canvas.style.top = 0;
+        canvas.style.left = 0;
+        canvas.style.right = 0;
+        canvas.style.bottom = 0;
+        canvas.style.width = width;
+        canvas.style.height = height;
     }
 
     function createGrid(gridScale, canvas) {
@@ -42,15 +42,16 @@ var dcl    = function () {
     return {
         setupScreen: function (width, height, keepSquare, gridScale) {
             var canvas = document.createElement('canvas');
-            canvas.id  = 'space';
+            canvas.id = 'space';
             setCanvasSize(canvas, width, height, keepSquare);
             var grid = createGrid(gridScale, canvas);
             setCanvasStyle(canvas, width, height);
 
             document.body.appendChild(canvas);
-
+            dcl.renderContext = canvas.getContext('2d');
+            dcl.screen = {width: canvas.width, height: canvas.height};
             return {
-                ctx: canvas.getContext('2d'),
+                ctx: dcl.renderContext,
                 width: canvas.width,
                 height: canvas.height,
                 cols: grid.cols,
@@ -67,53 +68,155 @@ var dcl    = function () {
         }
     };
 }();
-var vector = {
-    creteVector: function (x, y) {
+dcl.rad = function (deg) {
+    return deg * Math.PI / 180;
+};
+dcl.trig = function (deg) {
+    var rad = dcl.rad(deg);
+    var cos = Math.cos(rad);
+    var sin = Math.sin(rad);
+    return {
+        rad: rad,
+        cos: cos,
+        sin: sin,
+        transform: function (a, b) {
+            return {a: a * cos - b * sin, b: a * sin + b * cos};
+        }
+    };
+};
+dcl.vector = {
+    point: function (x, y, z) {
         return {
             x: x,
             y: y,
-            collidesWith: function (vector) {
-                return x === vector.x & y === vector.y;
+            z: z,
+            collidesWith: function (vector, threshold) {
+                return Math.abs(x - vector.x) <= threshold && Math.abs(y - vector.y) <= threshold && Math.abs(z - vector.z) <= threshold;
+            },
+            rotateX: function (angle) {
+                var tv = dcl.trig(angle).transform(y, z);
+                return dcl.vector.point(x, tv.a, tv.b);
+            },
+            rotateY: function (angle) {
+                var tv = dcl.trig(angle).transform(x, z);
+                return dcl.vector.point(tv.a, y, tv.b);
+            },
+            rotateZ: function (angle) {
+                var tv = dcl.trig(angle).transform(x, y);
+                return dcl.vector.point(tv.a, tv.b, z);
+            },
+            project: function (width, height, fov, distance) {
+                var factor = fov / (distance + z);
+                var nx = x * factor + width / 2;
+                var ny = y * factor + height / 2;
+                return dcl.vector.point(nx, ny, z);
             }
         };
     }
 };
-
-dcl.random = function(min,max){
-    return Math.floor(Math.random()*(max-min) + min);
+dcl.playAnimation = true;
+dcl.stopAnimation = function () {
+    dcl.playAnimation = false;
 };
-
-dcl.rect = function(ctx,x,y,width,height, color, lineWidth, lineColor){
+dcl.startAnimation = function () {
+    dcl.playAnimation = true;
+};
+dcl.random = function (min, max) {
+    return Math.floor(Math.random() * (max - min) + min);
+};
+dcl.clear = function (ctx) {
+    ctx = dcl.getCtx(ctx);
+    ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
+};
+dcl.animate = function () {
+    var render = dcl.draw || draw;
+    if (render) {
+        dcl.clear();
+        render();
+        if (dcl.playAnimation) {
+            requestAnimationFrame(dcl.animate);
+        }
+    }
+};
+dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
+    ctx = dcl.getCtx(ctx);
     height = height || width;
     ctx.fillStyle = color || "blue";
-    ctx.fillRect(x,y,width, height);
-    if(lineWidth){
+    ctx.fillRect(x, y, width, height);
+    if (lineWidth) {
         lineColor = lineColor || "#000088";
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
-        ctx.strokeRect(x,x,width,height);
+        ctx.strokeRect(x, x, width, height);
     }
 };
-dcl.circle = function(ctx,x,y,radius,color,lineWidth, lineColor){
+dcl.stroke = function (color, lineWidth, ctx) {
+    ctx = dcl.getCtx(ctx);
+    ctx.lineWidth = lineWidth;
+    ctx.strokeStyle = color || "#000088";
+    ctx.stroke();
+};
+dcl.fill = function (color, ctx) {
+    ctx = dcl.getCtx(ctx);
     color = color || "blue";
     ctx.fillStyle = color;
-    ctx.beginPath();
-    ctx.arc(x,y,radius, 0, 360 * Math.PI/180);
     ctx.fill();
-    if(lineWidth){
-        ctx.lineWidth = lineWidth;
-        ctx.strokeStyle = lineColor || "#000088";
-        ctx.stroke();
+};
+dcl.circle = function (x, y, radius, color, lineWidth, lineColor, ctx) {
+    ctx = dcl.getCtx(ctx);
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, dcl.rad(360));
+    dcl.fill(color, ctx);
+    if (lineWidth) {
+        dcl.stroke(lineWidth, lineColor, ctx);
     }
     ctx.closePath();
 };
-dcl.line = function(ctx,x,y,dx,dy,lineWidth, lineColor){
-    ctx.lineWidth = lineWidth;
-    ctx.strokeStyle = lineColor || "#000088";;
-
+dcl.line = function (x, y, dx, dy, lineWidth, lineColor, ctx) {
+    ctx = dcl.getCtx(ctx);
     ctx.beginPath();
-    ctx.moveTo(x,y);
-    ctx.lineTo(dx,dy);
-    ctx.stroke();
+    ctx.moveTo(x, y);
+    ctx.lineTo(dx, dy);
+    dcl.stroke(lineWidth, lineColor, ctx);
     ctx.closePath();
+};
+dcl.getCtx = function (ctx) {
+    return ctx || dcl.renderContext;
+};
+dcl.curve = {
+    start: function (x, y, ctx) {
+        ctx = dcl.getCtx(ctx);
+        ctx.moveTo(x, y);
+        ctx.beginPath();
+    },
+    end: function (ctx) {
+        dcl.getCtx(ctx).closePath();
+    },
+    vertex: function (x, y, ctx) {
+        dcl.getCtx(ctx).lineTo(x, y);
+    },
+    fill: function (color, ctx) {
+        ctx = dcl.getCtx(ctx);
+        dcl.fill(color, ctx);
+    },
+    stroke: function (color, width, ctx) {
+        ctx = dcl.getCtx(ctx);
+        dcl.stroke(color, width, ctx);
+    },
+    plot: function (points, lineColor, lineWidth) {
+        if (!points.forEach) {
+            console.error("Error! you must supply an array with coordinates as an argument to this function.");
+            return;
+        }
+        points.forEach(function (p, i, a) {
+            if (i === 0) {
+                dcl.curve.start(p.x, p.y);
+            } else if (i === a.length - 1) {
+                dcl.curve.stroke(lineColor, lineWidth);
+                dcl.curve.end();
+            } else {
+                dcl.curve.vertex(p.x, p.y);
+            }
+        })
+    }
 };
