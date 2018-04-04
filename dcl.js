@@ -161,6 +161,8 @@ dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
 dcl.stroke = function (color, lineWidth, ctx) {
     ctx = dcl.getCtx(ctx);
     ctx.lineWidth = lineWidth;
+    ctx.lineJoin = 'round';
+    ctx.lineCap='round';
     ctx.strokeStyle = color || "#000088";
     ctx.stroke();
 };
