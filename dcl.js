@@ -92,12 +92,19 @@ dcl.trig = function (deg) {
         }
     };
 };
+
 dcl.vector = {
     point: function (x, y, z) {
+        function magsqr(){
+            return x * x + y * y + z * z;
+        }
+        function mag(){
+            return Math.sqrt(magsqr());
+        }
         return {
-            x: x,
-            y: y,
-            z: z,
+            x: x || 0,
+            y: y || 0,
+            z: z || 0,
             collidesWith: function (vector, threshold) {
                 return Math.abs(x - vector.x) <= threshold && Math.abs(y - vector.y) <= threshold && Math.abs(z - vector.z) <= threshold;
             },
@@ -118,9 +125,61 @@ dcl.vector = {
                 var nx = x * factor + width / 2;
                 var ny = y * factor + height / 2;
                 return dcl.vector.point(nx, ny, z);
-            }
+            },
+            add: function(vx,vy,vz){
+               if(vx.isVector){
+                   return dcl.vector.point(x+vx.x, y+vx.y,z+vx.z);
+               }
+               vx = vx || 0;
+               vy = vy || 0;
+               vz = vz || 0;
+               return dcl.vector.point(x+vx, y+vy, z+vz);
+            },
+            sub: function(vx,vy,vz){
+                if(vx.isVector){
+                    return dcl.vector.point(x-vx.x, y-vx.y,z-vx.z);
+                }
+                vx = vx || 0;
+                vy = vy || 0;
+                vz = vz || 0;
+                return dcl.vector.point(x-vx, y-vy, z-vz);
+             },
+             mul: function(n){
+                 n = n || 0;
+                 return dcl.vector.point(x*n,y*n,z*n);
+             },
+             div: function(n){
+                 n = n || 1;
+                 return dcl.vector.point(x/n, y/n, z/n);
+             },
+             dot: function(vx,vy,vz){
+                 if(vx.isVector){
+                     return dcl.vector.point(x * vx.x, y * vx.y, z*vx.z);
+                 }
+                 vx = vx || 0;
+                 vy = vy || 0;
+                 vz = vz || 0;
+                 return dcl.vector.point(x*vx,y*vy,z*vz);
+             },
+             cross: function(v){
+                var vx = y * v.z - z * v.y;
+                var vy = z * v.x - x * v.z;
+                var vz = x * v.y - y * v.x;
+                return dcl.vector.point(vx,vy,vz);
+             },
+             mag: mag,
+             dist: function(v){
+                var d = dcl.vector.point(x,y,z).sub(v);
+                return d.mag();
+             },
+             norm: function(){
+                return dcl.vector.point(x,y,z).div(mag());
+             },
+             magsqr: magsqr,
+            isVector: true
         };
-    }
+    },
+
 };
 dcl.playAnimation = true;
 dcl.stopAnimation = function () {
@@ -230,3 +289,11 @@ dcl.curve = {
         })
     }
 };
+
+// Helper Extensions
+Number.prototype.toRadians = function(){
+    return this.valueOf() * (Math.PI / 180);
+}
+Number.prototype.toDegrees = function(){
+    return this.valueOf() * (180 / Math.PI);
+}
