@@ -246,7 +246,7 @@ dcl.line = function (x, y, dx, dy, lineWidth, lineColor, ctx) {
     ctx.beginPath();
     ctx.moveTo(x, y);
     ctx.lineTo(dx, dy);
-    dcl.stroke(lineWidth, lineColor, ctx);
+    dcl.stroke(lineColor, lineWidth, ctx);
     ctx.closePath();
 };
 dcl.getCtx = function (ctx) {
