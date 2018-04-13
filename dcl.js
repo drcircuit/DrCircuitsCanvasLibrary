@@ -95,6 +95,9 @@ dcl.trig = function (deg) {
 
 dcl.vector = {
     point: function (x, y, z) {
+        x = x || x;
+        y = y || y;
+        z = z || z;
         function magsqr(){
             return x * x + y * y + z * z;
         }
@@ -102,9 +105,9 @@ dcl.vector = {
             return Math.sqrt(magsqr());
         }
         return {
-            x: x || 0,
-            y: y || 0,
-            z: z || 0,
+            x: x,
+            y: y,
+            z: z,
             collidesWith: function (vector, threshold) {
                 return Math.abs(x - vector.x) <= threshold && Math.abs(y - vector.y) <= threshold && Math.abs(z - vector.z) <= threshold;
             },
