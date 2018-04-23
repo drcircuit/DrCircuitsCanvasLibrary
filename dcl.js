@@ -95,9 +95,9 @@ dcl.trig = function (deg) {
 
 dcl.vector = {
     point: function (x, y, z) {
-        x = x || x;
-        y = y || y;
-        z = z || z;
+        x = x || 0;
+        y = y || 0;
+        z = z || 0;
         function magsqr(){
             return x * x + y * y + z * z;
         }
