@@ -40,14 +40,17 @@ var dcl = function () {
     }
 
     return {
-        setupScreen: function (width, height, keepSquare, gridScale) {
+        setupScreen: function (width, height, keepSquare, gridScale, parent) {
             var canvas = document.createElement('canvas');
             canvas.id = 'space';
             setCanvasSize(canvas, width, height, keepSquare);
             var grid = createGrid(gridScale, canvas);
             setCanvasStyle(canvas, width, height);
-
-            document.body.appendChild(canvas);
+            if(parent){
+                parent.appendChild(canvas);
+            } else {
+                document.body.appendChild(canvas);
+            }
             dcl.renderContext = canvas.getContext('2d');
             dcl.screen = {width: canvas.width, height: canvas.height};
             return {
@@ -61,7 +64,7 @@ var dcl = function () {
                 },
 
                 randomSpot: function () {
-                    return vector.creteVector(Math.floor(Math.random() * grid.cols), Math.floor(Math.random() * grid.rows));
+                    return dcl.vector.point(Math.floor(Math.random() * grid.cols), Math.floor(Math.random() * grid.rows));
                 }
 
             }
@@ -195,7 +198,10 @@ dcl.startAnimation = function () {
     dcl.playAnimation = true;
 };
 dcl.random = function (min, max) {
-    return Math.floor(Math.random() * (max - min) + min);
+    return Math.random() * (max - min) + min;
+};
+dcl.randomi = function (min, max) {
+    return Math.floor(dcl.random(min, max));
 };
 dcl.clear = function (ctx) {
     ctx = dcl.getCtx(ctx);
