@@ -98,12 +98,15 @@ dcl.vector = {
         x = x || 0;
         y = y || 0;
         z = z || 0;
-        function magsqr(){
+
+        function magsqr() {
             return x * x + y * y + z * z;
         }
-        function mag(){
+
+        function mag() {
             return Math.sqrt(magsqr());
         }
+
         return {
             x: x,
             y: y,
@@ -129,56 +132,56 @@ dcl.vector = {
                 var ny = y * factor + height / 2;
                 return dcl.vector.point(nx, ny, z);
             },
-            add: function(vx,vy,vz){
-               if(vx.isVector){
-                   return dcl.vector.point(x+vx.x, y+vx.y,z+vx.z);
-               }
-               vx = vx || 0;
-               vy = vy || 0;
-               vz = vz || 0;
-               return dcl.vector.point(x+vx, y+vy, z+vz);
-            },
-            sub: function(vx,vy,vz){
-                if(vx.isVector){
-                    return dcl.vector.point(x-vx.x, y-vx.y,z-vx.z);
+            add: function (vx, vy, vz) {
+                if (vx.isVector) {
+                    return dcl.vector.point(x + vx.x, y + vx.y, z + vx.z);
                 }
                 vx = vx || 0;
                 vy = vy || 0;
                 vz = vz || 0;
-                return dcl.vector.point(x-vx, y-vy, z-vz);
-             },
-             mul: function(n){
-                 n = n || 0;
-                 return dcl.vector.point(x*n,y*n,z*n);
-             },
-             div: function(n){
-                 n = n || 1;
-                 return dcl.vector.point(x/n, y/n, z/n);
-             },
-             dot: function(vx,vy,vz){
-                 if(vx.isVector){
-                     return dcl.vector.point(x * vx.x, y * vx.y, z*vx.z);
-                 }
-                 vx = vx || 0;
-                 vy = vy || 0;
-                 vz = vz || 0;
-                 return dcl.vector.point(x*vx,y*vy,z*vz);
-             },
-             cross: function(v){
+                return dcl.vector.point(x + vx, y + vy, z + vz);
+            },
+            sub: function (vx, vy, vz) {
+                if (vx.isVector) {
+                    return dcl.vector.point(x - vx.x, y - vx.y, z - vx.z);
+                }
+                vx = vx || 0;
+                vy = vy || 0;
+                vz = vz || 0;
+                return dcl.vector.point(x - vx, y - vy, z - vz);
+            },
+            mul: function (n) {
+                n = n || 0;
+                return dcl.vector.point(x * n, y * n, z * n);
+            },
+            div: function (n) {
+                n = n || 1;
+                return dcl.vector.point(x / n, y / n, z / n);
+            },
+            dot: function (vx, vy, vz) {
+                if (vx.isVector) {
+                    return dcl.vector.point(x * vx.x, y * vx.y, z * vx.z);
+                }
+                vx = vx || 0;
+                vy = vy || 0;
+                vz = vz || 0;
+                return dcl.vector.point(x * vx, y * vy, z * vz);
+            },
+            cross: function (v) {
                 var vx = y * v.z - z * v.y;
                 var vy = z * v.x - x * v.z;
                 var vz = x * v.y - y * v.x;
-                return dcl.vector.point(vx,vy,vz);
-             },
-             mag: mag,
-             dist: function(v){
-                var d = dcl.vector.point(x,y,z).sub(v);
+                return dcl.vector.point(vx, vy, vz);
+            },
+            mag: mag,
+            dist: function (v) {
+                var d = dcl.vector.point(x, y, z).sub(v);
                 return d.mag();
-             },
-             norm: function(){
-                return dcl.vector.point(x,y,z).div(mag());
-             },
-             magsqr: magsqr,
+            },
+            norm: function () {
+                return dcl.vector.point(x, y, z).div(mag());
+            },
+            magsqr: magsqr,
             isVector: true
         };
     },
@@ -224,7 +227,7 @@ dcl.stroke = function (color, lineWidth, ctx) {
     ctx = dcl.getCtx(ctx);
     ctx.lineWidth = lineWidth;
     ctx.lineJoin = 'round';
-    ctx.lineCap='round';
+    ctx.lineCap = 'round';
     ctx.strokeStyle = color || "#000088";
     ctx.stroke();
 };
@@ -294,9 +297,12 @@ dcl.curve = {
 };
 
 // Helper Extensions
-Number.prototype.toRadians = function(){
+Number.prototype.toRadians = function () {
     return this.valueOf() * (Math.PI / 180);
-}
-Number.prototype.toDegrees = function(){
+};
+Number.prototype.toDegrees = function () {
     return this.valueOf() * (180 / Math.PI);
-}
+};
+Number.prototype.map = function (x, inputScaleMin, inputScaleMax, outputScaleMin, outputScaleMax) {
+    return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
+};
