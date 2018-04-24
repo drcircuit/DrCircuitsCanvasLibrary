@@ -303,6 +303,6 @@ Number.prototype.toRadians = function () {
 Number.prototype.toDegrees = function () {
     return this.valueOf() * (180 / Math.PI);
 };
-Number.prototype.map = function (x, inputScaleMin, inputScaleMax, outputScaleMin, outputScaleMax) {
+Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, outputScaleMax) {
     return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
 };
