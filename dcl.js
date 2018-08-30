@@ -97,13 +97,14 @@ dcl.trig = function (deg) {
 };
 
 dcl.vector = {
-    point: function (x, y, z) {
+    point: function (x, y, z, w) {
         x = x || 0;
         y = y || 0;
         z = z || 0;
+        w = w || 0;
 
         function magsqr() {
-            return x * x + y * y + z * z;
+            return x * x + y * y + z * z + w * w;
         }
 
         function mag() {
@@ -114,6 +115,7 @@ dcl.vector = {
             x: x,
             y: y,
             z: z,
+            w: w,
             collidesWith: function (vector, threshold) {
                 return Math.abs(x - vector.x) <= threshold && Math.abs(y - vector.y) <= threshold && Math.abs(z - vector.z) <= threshold;
             },
@@ -135,40 +137,43 @@ dcl.vector = {
                 var ny = y * factor + height / 2;
                 return dcl.vector.point(nx, ny, z);
             },
-            add: function (vx, vy, vz) {
+            add: function (vx, vy, vz, vw) {
                 if (vx.isVector) {
-                    return dcl.vector.point(x + vx.x, y + vx.y, z + vx.z);
+                    return dcl.vector.point(x + vx.x, y + vx.y, z + vx.z, w + vx.w);
                 }
                 vx = vx || 0;
                 vy = vy || 0;
                 vz = vz || 0;
-                return dcl.vector.point(x + vx, y + vy, z + vz);
+                vw = vw || 0;
+                return dcl.vector.point(x + vx, y + vy, z + vz, w + vw);
             },
             sub: function (vx, vy, vz) {
                 if (vx.isVector) {
-                    return dcl.vector.point(x - vx.x, y - vx.y, z - vx.z);
+                    return dcl.vector.point(x - vx.x, y - vx.y, z - vx.z, w - vx.w);
                 }
                 vx = vx || 0;
                 vy = vy || 0;
                 vz = vz || 0;
-                return dcl.vector.point(x - vx, y - vy, z - vz);
+                vw = vw || 0;
+                return dcl.vector.point(x - vx, y - vy, z - vz, w - vw);
             },
             mul: function (n) {
                 n = n || 0;
-                return dcl.vector.point(x * n, y * n, z * n);
+                return dcl.vector.point(x * n, y * n, z * n, w * n);
             },
             div: function (n) {
                 n = n || 1;
-                return dcl.vector.point(x / n, y / n, z / n);
+                return dcl.vector.point(x / n, y / n, z / n, w/n);
             },
-            dot: function (vx, vy, vz) {
+            dot: function (vx, vy, vz, vw) {
                 if (vx.isVector) {
-                    return dcl.vector.point(x * vx.x, y * vx.y, z * vx.z);
+                    return dcl.vector.point(x * vx.x, y * vx.y, z * vx.z, w * vx.w);
                 }
                 vx = vx || 0;
                 vy = vy || 0;
                 vz = vz || 0;
-                return dcl.vector.point(x * vx, y * vy, z * vz);
+                vw = vw || 0;
+                return dcl.vector.point(x * vx, y * vy, z * vz, w * vw);
             },
             cross: function (v) {
                 var vx = y * v.z - z * v.y;
@@ -178,11 +183,11 @@ dcl.vector = {
             },
             mag: mag,
             dist: function (v) {
-                var d = dcl.vector.point(x, y, z).sub(v);
+                var d = dcl.vector.point(x, y, z, w).sub(v);
                 return d.mag();
             },
             norm: function () {
-                return dcl.vector.point(x, y, z).div(mag());
+                return dcl.vector.point(x, y, z, w).div(mag());
             },
             magsqr: magsqr,
             isVector: true
