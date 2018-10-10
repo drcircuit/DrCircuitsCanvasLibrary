@@ -231,7 +231,7 @@ dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
         lineColor = lineColor || "#000088";
         ctx.strokeStyle = lineColor;
         ctx.lineWidth = lineWidth;
-        ctx.strokeRect(x, x, width, height);
+        ctx.strokeRect(x, y, width, height);
     }
 };
 dcl.stroke = function (color, lineWidth, ctx) {
