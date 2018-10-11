@@ -254,7 +254,7 @@ dcl.circle = function (x, y, radius, color, lineWidth, lineColor, ctx) {
     ctx.arc(x, y, radius, 0, dcl.rad(360));
     dcl.fill(color, ctx);
     if (lineWidth) {
-        dcl.stroke(lineWidth, lineColor, ctx);
+        dcl.stroke(lineColor,lineWidth,  ctx);
     }
     ctx.closePath();
 };
