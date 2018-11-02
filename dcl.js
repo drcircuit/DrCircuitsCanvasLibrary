@@ -83,15 +83,15 @@ dcl.rad = function (deg) {
     return deg * Math.PI / 180;
 };
 dcl.trig = function (deg) {
-    var rad = dcl.rad(deg);
-    var cos = Math.cos(rad);
-    var sin = Math.sin(rad);
+    var r = dcl.rad(deg);
+    var c = cos(rad);
+    var s = sin(rad);
     return {
-        rad: rad,
-        cos: cos,
-        sin: sin,
+        rad: r,
+        cos: c,
+        sin: s,
         transform: function (a, b) {
-            return { a: a * cos - b * sin, b: a * sin + b * cos };
+            return { a: a * cos - b * s, b: a * s + b * c };
         }
     };
 };
@@ -336,9 +336,9 @@ dcl.curve = {
 
 dcl.color = function (red, green, blue, alpha = 1.0) {
     return {
-        r: red,
-        g: green,
-        b: blue,
+        r: floor(red),
+        g: floor(green),
+        b: floor(blue),
         a: alpha,
         toStyle: function () {
             return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(2) + ")";
@@ -356,3 +356,11 @@ Number.prototype.toDegrees = function () {
 Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, outputScaleMax) {
     return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
 };
+
+const floor = Math.floor;
+const sin = Math.sin;
+const cos = Math.cos;
+const tan = Math.tan;
+const atan = Math.atan;
+const atan2 = Math.atan2;
+const pow = Math.pow;
