@@ -225,6 +225,9 @@ dcl.animate = function () {
 dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
     ctx = dcl.getCtx(ctx);
     height = height || width;
+    if(color.isColor){
+        color = color.toStyle();
+    }
     ctx.fillStyle = color || "blue";
     ctx.fillRect(x, y, width, height);
     if (lineWidth) {
@@ -327,7 +330,7 @@ dcl.curve = {
             } else {
                 dcl.curve.vertex(p.x, p.y);
             }
-        })
+        });
     }
 };
 
@@ -341,7 +344,7 @@ dcl.color = function (red, green, blue, alpha = 1.0) {
             return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(2) + ")";
         },
         isColor: true
-    }
+    };
 }
 // Helper Extensions
 Number.prototype.toRadians = function () {
