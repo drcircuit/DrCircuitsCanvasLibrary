@@ -289,6 +289,7 @@ dcl.text = function (text, x, y, color, font, size, maxWidth, align, ctx) {
     let style = (size || 16) + "px " + (font || "Arial");
     ctx.font = style;
     ctx.textAlign = align;
+    ctx.fillStyle = color;
     if(maxWidth){
         ctx.fillText(text, x, y, maxWidth);
     } else {
