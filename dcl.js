@@ -36,7 +36,7 @@ var dcl = function () {
             cols = canvas.width;
             rows = canvas.height;
         }
-        return {cols: cols, rows: rows};
+        return { cols: cols, rows: rows };
     }
 
     return {
@@ -46,13 +46,13 @@ var dcl = function () {
             setCanvasSize(canvas, width, height, keepSquare);
             var grid = createGrid(gridScale, canvas);
             setCanvasStyle(canvas, width, height);
-            if(parent){
+            if (parent) {
                 parent.appendChild(canvas);
             } else {
                 document.body.appendChild(canvas);
             }
             dcl.renderContext = canvas.getContext('2d');
-            dcl.screen = {width: canvas.width, height: canvas.height};
+            dcl.screen = { width: canvas.width, height: canvas.height };
             return {
                 ctx: dcl.renderContext,
                 width: canvas.width,
@@ -91,7 +91,7 @@ dcl.trig = function (deg) {
         cos: cos,
         sin: sin,
         transform: function (a, b) {
-            return {a: a * cos - b * sin, b: a * sin + b * cos};
+            return { a: a * cos - b * sin, b: a * sin + b * cos };
         }
     };
 };
@@ -163,7 +163,7 @@ dcl.vector = {
             },
             div: function (n) {
                 n = n || 1;
-                return dcl.vector.point(x / n, y / n, z / n, w/n);
+                return dcl.vector.point(x / n, y / n, z / n, w / n);
             },
             dot: function (vx, vy, vz, vw) {
                 if (vx.isVector) {
@@ -235,6 +235,10 @@ dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
     }
 };
 dcl.stroke = function (color, lineWidth, ctx) {
+    color = color || "blue";
+    if (color.isColor) {
+        color = color.toStyle();
+    }
     ctx = dcl.getCtx(ctx);
     ctx.lineWidth = lineWidth;
     ctx.lineJoin = 'round';
@@ -243,6 +247,10 @@ dcl.stroke = function (color, lineWidth, ctx) {
     ctx.stroke();
 };
 dcl.fill = function (color, ctx) {
+    color = color || "blue";
+    if (color.isColor) {
+        color = color.toStyle();
+    }
     ctx = dcl.getCtx(ctx);
     color = color || "blue";
     ctx.fillStyle = color;
@@ -254,7 +262,7 @@ dcl.circle = function (x, y, radius, color, lineWidth, lineColor, ctx) {
     ctx.arc(x, y, radius, 0, dcl.rad(360));
     dcl.fill(color, ctx);
     if (lineWidth) {
-        dcl.stroke(lineColor,lineWidth,  ctx);
+        dcl.stroke(lineColor, lineWidth, ctx);
     }
     ctx.closePath();
 };
@@ -269,6 +277,22 @@ dcl.line = function (x, y, dx, dy, lineWidth, lineColor, ctx) {
 dcl.getCtx = function (ctx) {
     return ctx || dcl.renderContext;
 };
+
+dcl.text = function (text, x, y, color, font, size, maxWidth, align, ctx) {
+    ctx = dcl.getCtx(ctx);
+    align = align || "center";
+    color = color || "blue";
+    color = color.isColor ? color.toStyle() : color;
+    let style = (size || 16) + "px " + (font || "Arial");
+    ctx.font = style;
+    ctx.textAlign = align;
+    if(maxWidth){
+        ctx.fillText(text, x, y, maxWidth);
+    } else {
+        ctx.fillText(text, x, y);
+    }
+};
+
 dcl.curve = {
     start: function (x, y, ctx) {
         ctx = dcl.getCtx(ctx);
@@ -307,6 +331,18 @@ dcl.curve = {
     }
 };
 
+dcl.color = function (red, green, blue, alpha = 1.0) {
+    return {
+        r: red,
+        g: green,
+        b: blue,
+        a: alpha,
+        toStyle: function () {
+            return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(2) + ")";
+        },
+        isColor: true
+    }
+}
 // Helper Extensions
 Number.prototype.toRadians = function () {
     return this.valueOf() * (Math.PI / 180);
