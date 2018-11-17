@@ -84,8 +84,8 @@ dcl.rad = function (deg) {
 };
 dcl.trig = function (deg) {
     var r = dcl.rad(deg);
-    var c = cos(rad);
-    var s = sin(rad);
+    var c = cos(r);
+    var s = sin(r);
     return {
         rad: r,
         cos: c,
