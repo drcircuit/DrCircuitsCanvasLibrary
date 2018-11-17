@@ -91,7 +91,7 @@ dcl.trig = function (deg) {
         cos: c,
         sin: s,
         transform: function (a, b) {
-            return { a: a * cos - b * s, b: a * s + b * c };
+            return { a: a * c - b * s, b: a * s + b * c };
         }
     };
 };
