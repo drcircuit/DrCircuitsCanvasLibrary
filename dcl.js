@@ -84,14 +84,14 @@ dcl.rad = function (deg) {
 };
 dcl.trig = function (deg) {
     var r = dcl.rad(deg);
-    var c = cos(rad);
-    var s = sin(rad);
+    var c = cos(r);
+    var s = sin(r);
     return {
         rad: r,
         cos: c,
         sin: s,
         transform: function (a, b) {
-            return { a: a * cos - b * s, b: a * s + b * c };
+            return { a: a * c - b * s, b: a * s + b * c };
         }
     };
 };
