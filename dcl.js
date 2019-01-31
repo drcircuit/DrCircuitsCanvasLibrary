@@ -348,7 +348,7 @@ dcl.color = function (red, green, blue, alpha = 1.0) {
     };
 }
 dcl.color.hue2rgb = function (p, q, t) {
-    console.log(p,q,t);
+    console.log(p, q, t);
     if (t < 0) {
         t += 1;
     }
@@ -371,11 +371,11 @@ dcl.color.fromHSB = function (hue, saturation, brightness) {
     let r, g, b;
     if (brightness === 0) {
         r = g = b = brightness;
-        console.log("Achron red ",r);
+        console.log("Achron red ", r);
     } else {
         let q = brightness < 0.5 ? brightness * (1 + saturation) : brightness + saturation - brightness * saturation;
         let p = 2 * brightness - q;
-        console.log(q,p,hue);
+        console.log(q, p, hue);
         r = dcl.color.hue2rgb(p, q, hue + 1 / 3);
         g = dcl.color.hue2rgb(p, q, hue);
         b = dcl.color.hue2rgb(p, q, hue - 1 / 3);
@@ -446,6 +446,19 @@ const KEYS = {
     NCOMMA: 110,
     ENTER: 13
 }
+
+dcl.complex = function (re, im) {
+    return {
+        re: re,
+        im: im,
+        add: function (c) {
+            return dcl.complex(re + c.re, im + c.im);
+        },
+        mul: function (c) {
+            return dcl.complex(re * c.re - im * c.im, re * c.im + im * c.re);
+        }
+    }
+}
 const floor = Math.floor;
 const sin = Math.sin;
 const cos = Math.cos;
@@ -453,13 +466,13 @@ const tan = Math.tan;
 const atan = Math.atan;
 const atan2 = Math.atan2;
 const pow = Math.pow;
-const RED = dcl.color(255,0,0);
-const MAGENTA = dcl.color(255,0,255);
-const YELLOW = dcl.color(255,255,0);
-const GREEN = dcl.color(0,255,0);
-const CYAN = dcl.color(0,255,255);
-const BLUE = dcl.color(0,0,255);
-const TRANS = dcl.color(0,0,0,0);
-const BLACK = dcl.color(0,0,0);
-const WHITE = dcl.color(255,255,255);
-const GRAY = dcl.color(128,128,128);
+const RED = dcl.color(255, 0, 0);
+const MAGENTA = dcl.color(255, 0, 255);
+const YELLOW = dcl.color(255, 255, 0);
+const GREEN = dcl.color(0, 255, 0);
+const CYAN = dcl.color(0, 255, 255);
+const BLUE = dcl.color(0, 0, 255);
+const TRANS = dcl.color(0, 0, 0, 0);
+const BLACK = dcl.color(0, 0, 0);
+const WHITE = dcl.color(255, 255, 255);
+const GRAY = dcl.color(128, 128, 128);
