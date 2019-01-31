@@ -147,7 +147,7 @@ dcl.vector = {
                 vw = vw || 0;
                 return dcl.vector.point(x + vx, y + vy, z + vz, w + vw);
             },
-            sub: function (vx, vy, vz) {
+            sub: function (vx, vy, vz, vw) {
                 if (vx.isVector) {
                     return dcl.vector.point(x - vx.x, y - vx.y, z - vx.z, w - vx.w);
                 }
