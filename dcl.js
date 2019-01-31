@@ -225,7 +225,7 @@ dcl.animate = function () {
 dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
     ctx = dcl.getCtx(ctx);
     height = height || width;
-    if(color.isColor){
+    if (color.isColor) {
         color = color.toStyle();
     }
     ctx.fillStyle = color || "blue";
@@ -290,7 +290,7 @@ dcl.text = function (text, x, y, color, font, size, maxWidth, align, ctx) {
     ctx.font = style;
     ctx.textAlign = align;
     ctx.fillStyle = color;
-    if(maxWidth){
+    if (maxWidth) {
         ctx.fillText(text, x, y, maxWidth);
     } else {
         ctx.fillText(text, x, y);
@@ -347,6 +347,41 @@ dcl.color = function (red, green, blue, alpha = 1.0) {
         isColor: true
     };
 }
+dcl.color.hue2rgb = function (p, q, t) {
+    console.log(p,q,t);
+    if (t < 0) {
+        t += 1;
+    }
+    if (t > 1) {
+        t -= 1;
+    }
+    if (t < 1 / 6) {
+        return p + (q - p) * 6 * t;
+    }
+    if (t < 1 / 2) {
+        return q;
+    }
+    if (t < 2 / 3) {
+        return p + (q - p) * (2 / 3 - t) * 6;
+    }
+    return p;
+};
+dcl.color.fromHSB = function (hue, saturation, brightness) {
+    hue = hue / 360;
+    let r, g, b;
+    if (brightness === 0) {
+        r = g = b = brightness;
+        console.log("Achron red ",r);
+    } else {
+        let q = brightness < 0.5 ? brightness * (1 + saturation) : brightness + saturation - brightness * saturation;
+        let p = 2 * brightness - q;
+        console.log(q,p,hue);
+        r = dcl.color.hue2rgb(p, q, hue + 1 / 3);
+        g = dcl.color.hue2rgb(p, q, hue);
+        b = dcl.color.hue2rgb(p, q, hue - 1 / 3);
+    }
+    return dcl.color(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
+}
 // Helper Extensions
 Number.prototype.toRadians = function () {
     return this.valueOf() * (Math.PI / 180);
@@ -367,48 +402,48 @@ const KEYS = {
     CONTROL: 17,
     ALT: 18,
     SHIFT: 16,
-    WIN:91,
-    WINCTX:92,
+    WIN: 91,
+    WINCTX: 92,
     ESCAPE: 27,
-    PIPE:220,
-    ONE:49,
-    TWO:50,
-    THREE:51,
-    FOUR:52,
-    FIVE:53,
-    SIX:54,
-    SEVEN:55,
-    EIGHT:56,
-    NINE:57,
-    ZERO:48,
-    BACKSLASH:219,
-    A:65,
-    S:83,
-    D:68,
-    F:70,
-    Q:81,
-    W:87,
-    E:69,
-    R:82,
-    Z:90,
-    X:88,
-    C:67,
-    V:86,
-    NONE:97,
-    NTWO:98,
-    NTHREE:99,
-    NFOUR:100,
-    NFIVE:101,
-    NSIX:102,
-    NSEVEN:103,
-    NEIGHT:104,
-    NNINE:105,
-    NZERO:96,
-    NMINUS:109,
-    NPLUS:107,
-    NSTAR:108,
-    NDIV:111,
-    NCOMMA:110,
+    PIPE: 220,
+    ONE: 49,
+    TWO: 50,
+    THREE: 51,
+    FOUR: 52,
+    FIVE: 53,
+    SIX: 54,
+    SEVEN: 55,
+    EIGHT: 56,
+    NINE: 57,
+    ZERO: 48,
+    BACKSLASH: 219,
+    A: 65,
+    S: 83,
+    D: 68,
+    F: 70,
+    Q: 81,
+    W: 87,
+    E: 69,
+    R: 82,
+    Z: 90,
+    X: 88,
+    C: 67,
+    V: 86,
+    NONE: 97,
+    NTWO: 98,
+    NTHREE: 99,
+    NFOUR: 100,
+    NFIVE: 101,
+    NSIX: 102,
+    NSEVEN: 103,
+    NEIGHT: 104,
+    NNINE: 105,
+    NZERO: 96,
+    NMINUS: 109,
+    NPLUS: 107,
+    NSTAR: 108,
+    NDIV: 111,
+    NCOMMA: 110,
     ENTER: 13
 }
 const floor = Math.floor;
