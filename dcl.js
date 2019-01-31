@@ -451,11 +451,42 @@ dcl.complex = function (re, im) {
     return {
         re: re,
         im: im,
+        isComplex: true,
         add: function (c) {
+            if(!c.isComplex){
+                return dcl.complex(re+c,im);
+            }
             return dcl.complex(re + c.re, im + c.im);
         },
+        sub: function(c){
+            if(!c.isComplex){
+                return dcl.complex(re-c,im);
+            }
+            return dcl.complex(re - c.re, im - c.im);
+        },        
         mul: function (c) {
+            if(!c.isComplex){
+                return dcl.complex(re*c, im*c);
+            }
             return dcl.complex(re * c.re - im * c.im, re * c.im + im * c.re);
+        },
+        div: function(c){
+            if(c === 0){
+                return dcl.complex(Infinity, -Infinity);
+            }
+            if(!c.isComplex){
+                return dcl.complex(re/c, im/c);
+            } else {
+                let a = dcl.complex(re,im);
+                let bcon = c.con();
+                a = a.mul(bcon);
+                let b = c.mul(bcon);
+                return a.div(b.re);
+            }
+        },
+        arg: Math.sqrt(re*re+im*im),
+        con: function(){
+            return dcl.complex(re,-im);
         }
     }
 }
