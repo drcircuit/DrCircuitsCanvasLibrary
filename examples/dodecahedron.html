@@ -12,30 +12,30 @@
     var angle = 0;
     var dod = {
         vertices: [
-            dcl.vector.point(dcl.const.iphi, 0, dcl.const.phi),
-            dcl.vector.point(-dcl.const.iphi, 0, dcl.const.phi),
-            dcl.vector.point(-dcl.const.iphi, 0, -dcl.const.phi),
-            dcl.vector.point(dcl.const.iphi, 0, -dcl.const.phi),
+            dcl.vector(dcl.const.iphi, 0, dcl.const.phi),
+            dcl.vector(-dcl.const.iphi, 0, dcl.const.phi),
+            dcl.vector(-dcl.const.iphi, 0, -dcl.const.phi),
+            dcl.vector(dcl.const.iphi, 0, -dcl.const.phi),
 
-            dcl.vector.point(dcl.const.phi, dcl.const.iphi,0),
-            dcl.vector.point(dcl.const.phi, -dcl.const.iphi,0),
-            dcl.vector.point(-dcl.const.phi, -dcl.const.iphi,0),
-            dcl.vector.point(-dcl.const.phi, dcl.const.iphi,0),
+            dcl.vector(dcl.const.phi, dcl.const.iphi,0),
+            dcl.vector(dcl.const.phi, -dcl.const.iphi,0),
+            dcl.vector(-dcl.const.phi, -dcl.const.iphi,0),
+            dcl.vector(-dcl.const.phi, dcl.const.iphi,0),
 
-            dcl.vector.point(0, dcl.const.phi, dcl.const.iphi),
-            dcl.vector.point(0, dcl.const.phi, -dcl.const.iphi),
-            dcl.vector.point(0, -dcl.const.phi, -dcl.const.iphi),
-            dcl.vector.point(0, -dcl.const.phi, dcl.const.iphi),
+            dcl.vector(0, dcl.const.phi, dcl.const.iphi),
+            dcl.vector(0, dcl.const.phi, -dcl.const.iphi),
+            dcl.vector(0, -dcl.const.phi, -dcl.const.iphi),
+            dcl.vector(0, -dcl.const.phi, dcl.const.iphi),
 
-            dcl.vector.point(1, 1, 1),
-            dcl.vector.point(1, -1, 1),
-            dcl.vector.point(-1, -1, 1),
-            dcl.vector.point(-1, 1, 1),
+            dcl.vector(1, 1, 1),
+            dcl.vector(1, -1, 1),
+            dcl.vector(-1, -1, 1),
+            dcl.vector(-1, 1, 1),
 
-            dcl.vector.point(-1, 1, -1),
-            dcl.vector.point(1, 1, -1),
-            dcl.vector.point(1, -1, -1),
-            dcl.vector.point(-1, -1, -1)
+            dcl.vector(-1, 1, -1),
+            dcl.vector(1, 1, -1),
+            dcl.vector(1, -1, -1),
+            dcl.vector(-1, -1, -1)
         ],
         faces: [
             [0, 12, 4, 5,13, 0],
