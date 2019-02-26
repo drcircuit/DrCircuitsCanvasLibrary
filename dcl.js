@@ -95,6 +95,89 @@ dcl.trig = function (deg) {
         }
     };
 };
+dcl.matrix = function(m){
+    m = m || [
+        [1,0,0,0],
+        [0,1,0,0],
+        [0,0,1,0],
+        [0,0,0,1]
+    ]; 
+    return {
+        m:m,
+        isMatrix: true,
+        mul: function(matrix){
+            let a = m;
+            let b = matrix.m;
+            let nm = [];
+            for (let r = 0; r < a.m.length; r++) {
+                let row = [];
+                for (let c = 0; c < b.m[0].length; c++) {
+                    let n = 0;
+                    for (let br = 0; br < b.m.length; br++) {
+                        n += a.m[r][br] * b.m[br][c];
+                    }
+                    row.push(n);
+                }
+                nm.push(row);
+            }
+            return dcl.matrix(nm);
+        }
+    };
+}
+dcl.matrix.rotation = {
+    x:function(deg){
+        let theta = deg.toRadians();
+        let m = dcl.matrix();
+        m.m[0][0] = 1;
+        m.m[1][1] = cos(theta);
+        m.m[1][2] = sin(theta);
+        m.m[2][1] = -sin(theta);
+        m.m[2][2] = cos(theta);
+        m.m[3][3] = 1;
+        return m;
+    },
+    y: function(theta){
+        let theta = deg.toRadians();
+        let m = dcl.matrix();
+        m.m[0][0] = cos(theta);
+        m.m[0][2] = sin(theta);
+        m.m[1][1] = 1
+        m.m[2][0] = -sin(theta);
+        m.m[2][3] = cos(theta);
+        m.m[3][3] = 1;
+        return m;
+    },
+    z: function(theta){
+        let theta = deg.toRadians();
+        let m = dcl.matrix();
+        m.m[0][1] = sin(theta);
+        m.m[0][0] = cos(theta);
+        m.m[1][0] = -sin(theta);
+        m.m[1][1] = cos(theta);
+        m.m[2][2] = 1;
+        m.m[3][3] = 1;
+        return m;
+    }
+}
+dcl.matrix.projection = function(fov,aspect,znear,zfar){
+    let fovrad = 1/Math.tan((fov/2).toRadians());
+        let m = dcl.matrix();
+        m.m[0][0] = aspect*fovrad;
+        m.m[1][1] = fovrad;
+        m.m[2][2] = zfar / (zfar-znear);
+        m.m[3][2] = (-zfar *znear)/(zfar-znear);
+        m.m[2][3] = 1;
+        m.m[3][3] = 0;
+        return m;
+}
+dcl.matrix.translation = function(x,y,z){
+    let m = dcl.matrix();
+        m.m[3][0] = x;
+        m.m[3][1] = y;
+        m.m[3][2] = z;
+        return m;
+}
+
 dcl.vector = function(x,y,z,w){
     x = x || 0;
         y = y || 0;
@@ -172,6 +255,13 @@ dcl.vector = function(x,y,z,w){
                 vz = vz || 0;
                 vw = vw || 0;
                 return dcl.vector(x * vx, y * vy, z * vz, w * vw);
+            },
+            matrixmul: function(v,m){
+                let x = v.x * m.m[0][0]+v.y*m.m[1][0]+v.z*m.m[2][0]+m.m[3][0];
+                let y = v.x * m.m[0][1]+v.y*m.m[1][1]+v.z*m.m[2][1]+m.m[3][1];
+                let z = v.x * m.m[0][2]+v.y*m.m[1][2]+v.z*m.m[2][2]+m.m[3][2];
+                let w = v.x * m.m[0][3]+v.y*m.m[1][3]+v.z*m.m[2][3]+m.m[3][3];
+                return dcl.vector(x,y,z,w);
             },
             dot: function(v){
                 return x * v.x + y * v.y + z * v.z + v.z + w * v.w;
