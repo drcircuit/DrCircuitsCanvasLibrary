@@ -117,12 +117,12 @@ dcl.matrix = function(m){
             let a = m;
             let b = matrix.m;
             let nm = [];
-            for (let r = 0; r < a.m.length; r++) {
+            for (let r = 0; r < a.length; r++) {
                 let row = [];
-                for (let c = 0; c < b.m[0].length; c++) {
+                for (let c = 0; c < b[0].length; c++) {
                     let n = 0;
-                    for (let br = 0; br < b.m.length; br++) {
-                        n += a.m[r][br] * b.m[br][c];
+                    for (let br = 0; br < b.length; br++) {
+                        n += a[r][br] * b[br][c];
                     }
                     row.push(n);
                 }
