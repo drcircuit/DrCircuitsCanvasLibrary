@@ -365,6 +365,54 @@ dcl.color.hue2rgb = function (p, q, t) {
     }
     return p;
 };
+dcl.color.fromHSL = function(h,s,l){
+        let r = 0,g = 0,b = 0 ;
+        if(s === 0){
+            r = g = b = l;
+        } else {
+            let hp = h/60;
+            let c = (1-Math.abs(2*l-1))*s;
+            let x = c * (1-Math.abs(hp % 2 - 1));
+      
+            if(hp >= 0 && hp <=1){
+                r = c;
+                g = x;
+                b = 0;
+            }
+            if(hp > 1 && hp <=2){
+                r = x;
+                g = c;
+                b = 0;
+            }
+            if(hp >2 && hp <=3){
+                r = 0;
+                g = c;
+                b = x;
+            }
+            if(hp >3 && hp <=4){
+                r = 0;
+                g = x;
+                b = c;
+            }
+            if(hp > 4&&hp <=5){
+                r = x;
+                g = 0;
+                b = c;
+            }
+            if(hp > 5 && hp <=6){
+                r = c;
+                g = 0;
+                b = x;
+            }
+            let m = l-c/2;
+            r = r+m;
+            g = g+m;
+            b = b+m;
+        }
+        return dcl.color(Math.round(r*255),Math.round(g*255),Math.round(b*255));
+
+}
+
 dcl.color.fromHSB = function (hue, saturation, brightness) {
     hue = hue / 360;
     let r, g, b;
@@ -391,6 +439,30 @@ Number.prototype.toDegrees = function () {
 Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, outputScaleMax) {
     return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
 };
+
+dcl.pallette = (function(){
+    let fire = [];
+    let gray = [];
+    let rainbow = [];
+    for(let i =0;i<255;i++){
+        gray.push(dcl.color(i,i,i));
+    }
+    for(let i = 0;i<255;i++){
+        let l = i/255;
+        let h = i.map(0,255,0,85); // 0 deg to 85 deg i HSL space is red to yellow
+        fire.push(dcl.color.fromHSL(h,1,l));
+    }
+    for(let i = 0;i<255;i++){
+        let l = i/255;
+        let h = i.map(0,255,0,360); // 0 deg to 85 deg i HSL space is red to yellow
+        rainbow.push(dcl.color.fromHSL(h,1,l));
+    }
+    return {
+        fire: fire,
+        rainbow:rainbow,
+        gray: gray
+    }
+})();
 
 const KEYS = {
     LEFT: 37,
