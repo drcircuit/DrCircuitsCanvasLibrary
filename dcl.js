@@ -144,7 +144,7 @@ dcl.matrix.rotation = {
         m.m[3][3] = 1;
         return m;
     },
-    y: function(theta){
+    y: function(deg){
         let theta = deg.toRadians();
         let m = dcl.matrix();
         m.m[0][0] = cos(theta);
@@ -155,7 +155,7 @@ dcl.matrix.rotation = {
         m.m[3][3] = 1;
         return m;
     },
-    z: function(theta){
+    z: function(deg){
         let theta = deg.toRadians();
         let m = dcl.matrix();
         m.m[0][1] = sin(theta);
