@@ -190,7 +190,7 @@ dcl.vector = function(x,y,z,w){
     x = x || 0;
         y = y || 0;
         z = z || 0;
-        w = w || 0;
+        w = w || 1;
 
         function magsqr() {
             return x * x + y * y + z * z + w * w;
@@ -264,12 +264,12 @@ dcl.vector = function(x,y,z,w){
                 vw = vw || 0;
                 return dcl.vector(x * vx, y * vy, z * vz, w * vw);
             },
-            matrixmul: function(v,m){
-                let x = v.x * m.m[0][0]+v.y*m.m[1][0]+v.z*m.m[2][0]+m.m[3][0];
-                let y = v.x * m.m[0][1]+v.y*m.m[1][1]+v.z*m.m[2][1]+m.m[3][1];
-                let z = v.x * m.m[0][2]+v.y*m.m[1][2]+v.z*m.m[2][2]+m.m[3][2];
-                let w = v.x * m.m[0][3]+v.y*m.m[1][3]+v.z*m.m[2][3]+m.m[3][3];
-                return dcl.vector(x,y,z,w);
+            matrixmul: function(m){
+                let nx = x * m.m[0][0] + y * m.m[1][0] + z * m.m[2][0] + w * m.m[3][0];
+                let ny = x * m.m[0][1] + y * m.m[1][1] + z * m.m[2][1] + w * m.m[3][1];
+                let nz = x * m.m[0][2] + y * m.m[1][2] + z * m.m[2][2] + w * m.m[3][2];
+                let nw = x * m.m[0][3] + y * m.m[1][3] + z * m.m[2][3] + w * m.m[3][3];
+                return dcl.vector(nx, ny, nz, nw);
             },
             dot: function(v){
                 return x * v.x + y * v.y + z * v.z + v.z + w * v.w;
