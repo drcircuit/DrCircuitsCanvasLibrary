@@ -1,6 +1,14 @@
 /**
  * Created by Espen on 03.03.2017.
  */
+const floor = Math.floor;
+const sin = Math.sin;
+const cos = Math.cos;
+const tan = Math.tan;
+const atan = Math.atan;
+const atan2 = Math.atan2;
+const pow = Math.pow;
+
 var dcl = function () {
 
     function setCanvasSize(canvas, width, height, keepSquare) {
@@ -651,13 +659,7 @@ dcl.complex = function (re, im) {
         }
     }
 }
-const floor = Math.floor;
-const sin = Math.sin;
-const cos = Math.cos;
-const tan = Math.tan;
-const atan = Math.atan;
-const atan2 = Math.atan2;
-const pow = Math.pow;
+
 const RED = dcl.color(255, 0, 0);
 const MAGENTA = dcl.color(255, 0, 255);
 const YELLOW = dcl.color(255, 255, 0);
