@@ -461,7 +461,7 @@ dcl.pallette = (function(){
         fire: fire,
         rainbow:rainbow,
         gray: gray
-    }
+    };
 })();
 
 const KEYS = {
