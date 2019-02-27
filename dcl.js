@@ -103,17 +103,17 @@ dcl.trig = function (deg) {
         }
     };
 };
-dcl.matrix = function(m){
+dcl.matrix = function (m) {
     m = m || [
-        [1,0,0,0],
-        [0,1,0,0],
-        [0,0,1,0],
-        [0,0,0,1]
-    ]; 
+        [1, 0, 0, 0],
+        [0, 1, 0, 0],
+        [0, 0, 1, 0],
+        [0, 0, 0, 1]
+    ];
     return {
-        m:m,
+        m: m,
         isMatrix: true,
-        mul: function(matrix){
+        mul: function (matrix) {
             let a = m;
             let b = matrix.m;
             let nm = [];
@@ -133,7 +133,7 @@ dcl.matrix = function(m){
     };
 }
 dcl.matrix.rotation = {
-    x:function(deg){
+    x: function (deg) {
         let theta = deg.toRadians();
         let m = dcl.matrix();
         m.m[0][0] = 1;
@@ -144,7 +144,7 @@ dcl.matrix.rotation = {
         m.m[3][3] = 1;
         return m;
     },
-    y: function(deg){
+    y: function (deg) {
         let theta = deg.toRadians();
         let m = dcl.matrix();
         m.m[0][0] = cos(theta);
@@ -155,7 +155,7 @@ dcl.matrix.rotation = {
         m.m[3][3] = 1;
         return m;
     },
-    z: function(deg){
+    z: function (deg) {
         let theta = deg.toRadians();
         let m = dcl.matrix();
         m.m[0][1] = sin(theta);
@@ -167,130 +167,131 @@ dcl.matrix.rotation = {
         return m;
     }
 }
-dcl.matrix.projection = function(fov,aspect,znear,zfar){
-    let fovrad = 1/Math.tan((fov/2).toRadians());
-        let m = dcl.matrix();
-        m.m[0][0] = aspect*fovrad;
-        m.m[1][1] = fovrad;
-        m.m[2][2] = zfar / (zfar-znear);
-        m.m[3][2] = (-zfar *znear)/(zfar-znear);
-        m.m[2][3] = 1;
-        m.m[3][3] = 0;
-        return m;
-}
-dcl.matrix.translation = function(x,y,z){
+dcl.matrix.projection = function (fov, aspect, znear, zfar) {
+    let fovrad = 1 / Math.tan((fov / 2).toRadians());
     let m = dcl.matrix();
-        m.m[3][0] = x;
-        m.m[3][1] = y;
-        m.m[3][2] = z;
-        return m;
+    m.m[0][0] = aspect * fovrad;
+    m.m[1][1] = fovrad;
+    m.m[2][2] = zfar / (zfar - znear);
+    m.m[3][2] = (-zfar * znear) / (zfar - znear);
+    m.m[2][3] = 1;
+    m.m[3][3] = 0;
+    return m;
+}
+dcl.matrix.translation = function (x, y, z) {
+    let m = dcl.matrix();
+    m.m[3][0] = x;
+    m.m[3][1] = y;
+    m.m[3][2] = z;
+    return m;
 }
 
-dcl.vector = function(x,y,z,w){
+dcl.vector = function (x, y, z, w) {
     x = x || 0;
-        y = y || 0;
-        z = z || 0;
-        w = w || 1;
+    y = y || 0;
+    z = z || 0;
+    w = w === undefined || w === null ? 1 : w;
 
-        function magsqr() {
-            return x * x + y * y + z * z + w * w;
-        }
+    function magsqr() {
+        return x * x + y * y + z * z + w * w;
+    }
 
-        function mag() {
-            return Math.sqrt(magsqr());
-        }
+    function mag() {
+        return Math.sqrt(magsqr());
+    }
 
-        return {
-            x: x,
-            y: y,
-            z: z,
-            w: w,
-            collidesWith: function (vector, threshold) {
-                return Math.abs(x - vector.x) <= threshold && Math.abs(y - vector.y) <= threshold && Math.abs(z - vector.z) <= threshold;
-            },
-            rotateX: function (angle) {
-                var tv = dcl.trig(angle).transform(y, z);
-                return dcl.vector(x, tv.a, tv.b);
-            },
-            rotateY: function (angle) {
-                var tv = dcl.trig(angle).transform(x, z);
-                return dcl.vector(tv.a, y, tv.b);
-            },
-            rotateZ: function (angle) {
-                var tv = dcl.trig(angle).transform(x, y);
-                return dcl.vector(tv.a, tv.b, z);
-            },
-            project: function (width, height, fov, distance) {
-                var factor = fov / (distance + z);
-                var nx = x * factor + width / 2;
-                var ny = y * factor + height / 2;
-                return dcl.vector(nx, ny, z);
-            },
-            add: function (vx, vy, vz, vw) {
-                if (vx.isVector) {
-                    return dcl.vector(x + vx.x, y + vx.y, z + vx.z, w + vx.w);
-                }
-                vx = vx || 0;
-                vy = vy || 0;
-                vz = vz || 0;
-                vw = vw || 0;
-                return dcl.vector(x + vx, y + vy, z + vz, w + vw);
-            },
-            sub: function (vx, vy, vz, vw) {
-                if (vx.isVector) {
-                    return dcl.vector(x - vx.x, y - vx.y, z - vx.z, w - vx.w);
-                }
-                vx = vx || 0;
-                vy = vy || 0;
-                vz = vz || 0;
-                vw = vw || 0;
-                return dcl.vector(x - vx, y - vy, z - vz, w - vw);
-            },
-            smul: function (n) {
-                n = n || 0;
-                return dcl.vector(x * n, y * n, z * n, w * n);
-            },
-            div: function (n) {
-                n = n || 1;
-                return dcl.vector(x / n, y / n, z / n, w / n);
-            },
-            mul: function (vx, vy, vz, vw) {
-                if (vx.isVector) {
-                    return dcl.vector(x * vx.x, y * vx.y, z * vx.z, w * vx.w);
-                }
-                vx = vx || 0;
-                vy = vy || 0;
-                vz = vz || 0;
-                vw = vw || 0;
-                return dcl.vector(x * vx, y * vy, z * vz, w * vw);
-            },
-            matrixmul: function(m){
-                let nx = x * m.m[0][0] + y * m.m[1][0] + z * m.m[2][0] + w * m.m[3][0];
-                let ny = x * m.m[0][1] + y * m.m[1][1] + z * m.m[2][1] + w * m.m[3][1];
-                let nz = x * m.m[0][2] + y * m.m[1][2] + z * m.m[2][2] + w * m.m[3][2];
-                let nw = x * m.m[0][3] + y * m.m[1][3] + z * m.m[2][3] + w * m.m[3][3];
-                return dcl.vector(nx, ny, nz, nw);
-            },
-            dot: function(v){
-                return x * v.x + y * v.y + z * v.z + v.z + w * v.w;
-            },
-            cross: function (v) {
-                var vx = y * v.z - z * v.y;
-                var vy = z * v.x - x * v.z;
-                var vz = x * v.y - y * v.x;
-                return dcl.vector(vx, vy, vz);
-            },
-            mag: mag,
-            dist: function (v) {
-                var d = dcl.vector(x, y, z, w).sub(v);
-                return d.mag();
-            },
-            norm: function () {
-                return dcl.vector(x, y, z, w).div(mag());
-            },
-            magsqr: magsqr,
-            isVector: true
-        };
+    return {
+        x: x,
+        y: y,
+        z: z,
+        w: w,
+        collidesWith: function (vector, threshold) {
+            return Math.abs(x - vector.x) <= threshold && Math.abs(y - vector.y) <= threshold && Math.abs(z - vector.z) <= threshold;
+        },
+        rotateX: function (angle) {
+            var tv = dcl.trig(angle).transform(y, z);
+            return dcl.vector(x, tv.a, tv.b);
+        },
+        rotateY: function (angle) {
+            var tv = dcl.trig(angle).transform(x, z);
+            return dcl.vector(tv.a, y, tv.b);
+        },
+        rotateZ: function (angle) {
+            var tv = dcl.trig(angle).transform(x, y);
+            return dcl.vector(tv.a, tv.b, z);
+        },
+        project: function (width, height, fov, distance) {
+            var factor = fov / (distance + z);
+            var nx = x * factor + width / 2;
+            var ny = y * factor + height / 2;
+            return dcl.vector(nx, ny, z, 0);
+        },
+        add: function (vx, vy, vz, vw) {
+            if (vx.isVector) {
+                return dcl.vector(x + vx.x, y + vx.y, z + vx.z, w + vx.w);
+            }
+            vx = vx || 0;
+            vy = vy || 0;
+            vz = vz || 0;
+            vw = vw || 0;
+            return dcl.vector(x + vx, y + vy, z + vz, w + vw);
+        },
+        sub: function (vx, vy, vz, vw) {
+            if (vx.isVector) {
+                return dcl.vector(x - vx.x, y - vx.y, z - vx.z, w - vx.w);
+            }
+            vx = vx || 0;
+            vy = vy || 0;
+            vz = vz || 0;
+            vw = vw || 0;
+            return dcl.vector(x - vx, y - vy, z - vz, w - vw);
+        },
+        smul: function (n) {
+            n = n || 0;
+            return dcl.vector(x * n, y * n, z * n, w * n);
+        },
+        div: function (n) {
+            n = n || 1;
+            return dcl.vector(x / n, y / n, z / n, w / n);
+        },
+        mul: function (vx, vy, vz, vw) {
+            if (vx.isVector) {
+                return dcl.vector(x * vx.x, y * vx.y, z * vx.z, w * vx.w);
+            }
+            vx = vx || 0;
+            vy = vy || 0;
+            vz = vz || 0;
+            vw = vw || 0;
+            return dcl.vector(x * vx, y * vy, z * vz, w * vw);
+        },
+        matrixmul: function (m) {
+            let nx = x * m.m[0][0] + y * m.m[1][0] + z * m.m[2][0] + w * m.m[3][0];
+            let ny = x * m.m[0][1] + y * m.m[1][1] + z * m.m[2][1] + w * m.m[3][1];
+            let nz = x * m.m[0][2] + y * m.m[1][2] + z * m.m[2][2] + w * m.m[3][2];
+            let nw = x * m.m[0][3] + y * m.m[1][3] + z * m.m[2][3] + w * m.m[3][3];
+            return dcl.vector(nx, ny, nz, nw);
+        },
+        dot: function (v) {
+            return x * v.x + y * v.y + z * v.z;
+        },
+        cross: function (v) {
+            var vx = y * v.z - z * v.y;
+            var vy = z * v.x - x * v.z;
+            var vz = x * v.y - y * v.x;
+
+            return dcl.vector(vx, vy, vz, 0);
+        },
+        mag: mag,
+        dist: function (v) {
+            var d = dcl.vector(x, y, z, w).sub(v);
+            return d.mag();
+        },
+        norm: function () {
+            return dcl.vector(x, y, z, w).div(mag());
+        },
+        magsqr: magsqr,
+        isVector: true
+    };
 }
 dcl.playAnimation = true;
 dcl.stopAnimation = function () {
@@ -463,51 +464,51 @@ dcl.color.hue2rgb = function (p, q, t) {
     }
     return p;
 };
-dcl.color.fromHSL = function(h,s,l){
-        let r = 0,g = 0,b = 0 ;
-        if(s === 0){
-            r = g = b = l;
-        } else {
-            let hp = h/60;
-            let c = (1-Math.abs(2*l-1))*s;
-            let x = c * (1-Math.abs(hp % 2 - 1));
-      
-            if(hp >= 0 && hp <=1){
-                r = c;
-                g = x;
-                b = 0;
-            }
-            if(hp > 1 && hp <=2){
-                r = x;
-                g = c;
-                b = 0;
-            }
-            if(hp >2 && hp <=3){
-                r = 0;
-                g = c;
-                b = x;
-            }
-            if(hp >3 && hp <=4){
-                r = 0;
-                g = x;
-                b = c;
-            }
-            if(hp > 4&&hp <=5){
-                r = x;
-                g = 0;
-                b = c;
-            }
-            if(hp > 5 && hp <=6){
-                r = c;
-                g = 0;
-                b = x;
-            }
-            let m = l-c/2;
-            r = r+m;
-            g = g+m;
-            b = b+m;
+dcl.color.fromHSL = function (h, s, l) {
+    let r = 0, g = 0, b = 0;
+    if (s === 0) {
+        r = g = b = l;
+    } else {
+        let hp = h / 60;
+        let c = (1 - Math.abs(2 * l - 1)) * s;
+        let x = c * (1 - Math.abs(hp % 2 - 1));
+
+        if (hp >= 0 && hp <= 1) {
+            r = c;
+            g = x;
+            b = 0;
         }
-        return dcl.color(Math.round(r*255),Math.round(g*255),Math.round(b*255));
+        if (hp > 1 && hp <= 2) {
+            r = x;
+            g = c;
+            b = 0;
+        }
+        if (hp > 2 && hp <= 3) {
+            r = 0;
+            g = c;
+            b = x;
+        }
+        if (hp > 3 && hp <= 4) {
+            r = 0;
+            g = x;
+            b = c;
+        }
+        if (hp > 4 && hp <= 5) {
+            r = x;
+            g = 0;
+            b = c;
+        }
+        if (hp > 5 && hp <= 6) {
+            r = c;
+            g = 0;
+            b = x;
+        }
+        let m = l - c / 2;
+        r = r + m;
+        g = g + m;
+        b = b + m;
+    }
+    return dcl.color(Math.round(r * 255), Math.round(g * 255), Math.round(b * 255));
 
 }
 
@@ -538,26 +539,26 @@ Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, o
     return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
 };
 
-dcl.pallette = (function(){
+dcl.pallette = (function () {
     let fire = [];
     let gray = [];
     let rainbow = [];
-    for(let i =0;i<255;i++){
-        gray.push(dcl.color(i,i,i));
+    for (let i = 0; i < 255; i++) {
+        gray.push(dcl.color(i, i, i));
     }
-    for(let i = 0;i<255;i++){
-        let l = i/255;
-        let h = i.map(0,255,0,85); // 0 deg to 85 deg i HSL space is red to yellow
-        fire.push(dcl.color.fromHSL(h,1,l));
+    for (let i = 0; i < 255; i++) {
+        let l = i / 255;
+        let h = i.map(0, 255, 0, 85); // 0 deg to 85 deg i HSL space is red to yellow
+        fire.push(dcl.color.fromHSL(h, 1, l));
     }
-    for(let i = 0;i<255;i++){
-        let l = i/255;
-        let h = i.map(0,255,0,360); // 0 deg to 85 deg i HSL space is red to yellow
-        rainbow.push(dcl.color.fromHSL(h,1,l));
+    for (let i = 0; i < 255; i++) {
+        let l = i / 255;
+        let h = i.map(0, 255, 0, 360); // 0 deg to 85 deg i HSL space is red to yellow
+        rainbow.push(dcl.color.fromHSL(h, 1, l));
     }
     return {
         fire: fire,
-        rainbow:rainbow,
+        rainbow: rainbow,
         gray: gray
     };
 })();
@@ -622,40 +623,40 @@ dcl.complex = function (re, im) {
         im: im,
         isComplex: true,
         add: function (c) {
-            if(!c.isComplex){
-                return dcl.complex(re+c,im);
+            if (!c.isComplex) {
+                return dcl.complex(re + c, im);
             }
             return dcl.complex(re + c.re, im + c.im);
         },
-        sub: function(c){
-            if(!c.isComplex){
-                return dcl.complex(re-c,im);
+        sub: function (c) {
+            if (!c.isComplex) {
+                return dcl.complex(re - c, im);
             }
             return dcl.complex(re - c.re, im - c.im);
-        },        
+        },
         mul: function (c) {
-            if(!c.isComplex){
-                return dcl.complex(re*c, im*c);
+            if (!c.isComplex) {
+                return dcl.complex(re * c, im * c);
             }
             return dcl.complex(re * c.re - im * c.im, re * c.im + im * c.re);
         },
-        div: function(c){
-            if(c === 0){
+        div: function (c) {
+            if (c === 0) {
                 return dcl.complex(Infinity, -Infinity);
             }
-            if(!c.isComplex){
-                return dcl.complex(re/c, im/c);
+            if (!c.isComplex) {
+                return dcl.complex(re / c, im / c);
             } else {
-                let a = dcl.complex(re,im);
+                let a = dcl.complex(re, im);
                 let bcon = c.con();
                 a = a.mul(bcon);
                 let b = c.mul(bcon);
                 return a.div(b.re);
             }
         },
-        arg: Math.sqrt(re*re+im*im),
-        con: function(){
-            return dcl.complex(re,-im);
+        arg: Math.sqrt(re * re + im * im),
+        con: function () {
+            return dcl.complex(re, -im);
         }
     }
 }
