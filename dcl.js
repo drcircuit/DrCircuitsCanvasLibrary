@@ -292,6 +292,15 @@ dcl.vector = function (x, y, z, w) {
         norm: function () {
             return dcl.vector(x, y, z, w).div(mag());
         },
+        floor: function(){
+            return dcl.vector(floor(x),floor(y),floor(z),floor(w));
+        },
+        ceil: function(){
+            return dcl.vector(ceil(x),ceil(y),ceil(z),ceil(w));
+        },
+        round: function(){
+            return dcl.vector(round(x),round(y),round(z),round(w));
+        },
         magsqr: magsqr,
         isVector: true
     };
