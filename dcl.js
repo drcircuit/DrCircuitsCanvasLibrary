@@ -2,6 +2,8 @@
  * Created by Espen on 03.03.2017.
  */
 const floor = Math.floor;
+const ceil = Math.ceil;
+const round = Math.round;
 const sin = Math.sin;
 const cos = Math.cos;
 const tan = Math.tan;
@@ -543,15 +545,15 @@ dcl.pallette = (function () {
     let fire = [];
     let gray = [];
     let rainbow = [];
-    for (let i = 0; i < 255; i++) {
+    for (let i = 0; i < 256; i++) {
         gray.push(dcl.color(i, i, i));
     }
-    for (let i = 0; i < 255; i++) {
+    for (let i = 0; i < 256; i++) {
         let l = i / 255;
         let h = i.map(0, 255, 0, 85); // 0 deg to 85 deg i HSL space is red to yellow
         fire.push(dcl.color.fromHSL(h, 1, l));
     }
-    for (let i = 0; i < 255; i++) {
+    for (let i = 0; i < 256; i++) {
         let l = i / 255;
         let h = i.map(0, 255, 0, 360); // 0 deg to 85 deg i HSL space is red to yellow
         rainbow.push(dcl.color.fromHSL(h, 1, l));
