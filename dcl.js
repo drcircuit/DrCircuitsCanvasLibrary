@@ -4,6 +4,7 @@
 const floor = Math.floor;
 const ceil = Math.ceil;
 const round = Math.round;
+const abs = Math.abs;
 const sin = Math.sin;
 const cos = Math.cos;
 const tan = Math.tan;
