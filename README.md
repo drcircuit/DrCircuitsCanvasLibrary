@@ -2,7 +2,7 @@
 A tiny library for doing boilerplate stuff for canvas based vanilla js gfx and game projects.
 
 Installation:
-Install via bower: ```bower install --save DrCircuitsCanvasLibrary ```
+Install via npm: ```npm install --save drcircuitscanvaslibrary ```
 
 Usage:
 ```javascript
