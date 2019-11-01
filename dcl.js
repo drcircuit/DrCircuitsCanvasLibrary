@@ -305,6 +305,7 @@ dcl.vector = function (x, y, z, w) {
         isVector: true
     };
 }
+dcl.clearEachFrame = true;
 dcl.playAnimation = true;
 dcl.stopAnimation = function () {
     dcl.playAnimation = false;
@@ -322,11 +323,13 @@ dcl.clear = function (ctx) {
     ctx = dcl.getCtx(ctx);
     ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
 };
-dcl.animate = function () {
+dcl.animate = function (t) {
     var render = dcl.draw || draw;
     if (render) {
-        dcl.clear();
-        render();
+        if(dcl.clearEachFrame){
+            dcl.clear();
+        }
+        render(t);
         if (dcl.playAnimation) {
             requestAnimationFrame(dcl.animate);
         }
@@ -551,7 +554,7 @@ Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, o
     return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
 };
 
-dcl.pallette = (function () {
+dcl.palette = (function () {
     let fire = [];
     let gray = [];
     let rainbow = [];
@@ -574,6 +577,9 @@ dcl.pallette = (function () {
         gray: gray
     };
 })();
+
+const PI = Math.PI;
+const E = Math.E;
 
 const KEYS = {
     LEFT: 37,
