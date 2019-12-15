@@ -292,14 +292,14 @@ dcl.vector = function (x, y, z, w) {
         norm: function () {
             return dcl.vector(x, y, z, w).div(mag());
         },
-        floor: function(){
-            return dcl.vector(floor(x),floor(y),floor(z),floor(w));
+        floor: function () {
+            return dcl.vector(floor(x), floor(y), floor(z), floor(w));
         },
-        ceil: function(){
-            return dcl.vector(ceil(x),ceil(y),ceil(z),ceil(w));
+        ceil: function () {
+            return dcl.vector(ceil(x), ceil(y), ceil(z), ceil(w));
         },
-        round: function(){
-            return dcl.vector(round(x),round(y),round(z),round(w));
+        round: function () {
+            return dcl.vector(round(x), round(y), round(z), round(w));
         },
         magsqr: magsqr,
         isVector: true
@@ -326,7 +326,7 @@ dcl.clear = function (ctx) {
 dcl.animate = function (t) {
     var render = dcl.draw || draw;
     if (render) {
-        if(dcl.clearEachFrame){
+        if (dcl.clearEachFrame) {
             dcl.clear();
         }
         render(t);
@@ -553,6 +553,34 @@ Number.prototype.toDegrees = function () {
 Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, outputScaleMax) {
     return (this.valueOf() - inputScaleMin) * (outputScaleMax - outputScaleMin) / (inputScaleMax - inputScaleMin) + outputScaleMin;
 };
+
+dcl.image = function (img, x, y, w, h, scale = 1, ctx = null) {
+    ctx = dcl.getCtx(ctx);
+    if (img.isSprite) {
+        let sx = img.x;
+        let sy = img.y;
+        let sw = img.width;
+        let sh = img.height;
+        let dx = x;
+        let dy = y;
+        let dw = w * scale;
+        let dh = h * scale;
+        ctx.drawImage(img.img, sx, sy, sw, sh, dx, dy, dw, dh);
+    } else {
+        ctx.drawImage(img, x, y, w * scale, h * scale);
+    }
+
+}
+dcl.sprite = function (sheet, x, y, w, h) {
+    return {
+        isSprite: true,
+        img: sheet,
+        pos: dcl.vector(x, y),
+        width: w,
+        height: h
+    };
+}
+
 
 dcl.palette = (function () {
     let fire = [];
