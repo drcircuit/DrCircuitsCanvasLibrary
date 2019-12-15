@@ -341,6 +341,9 @@ dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
     if (color.isColor) {
         color = color.toStyle();
     }
+    if(lineColor && lineColor.isColor){
+        lineColor = lineColor.toStyle();
+    }
     ctx.fillStyle = color || "blue";
     ctx.fillRect(x, y, width, height);
     if (lineWidth) {
@@ -557,14 +560,14 @@ Number.prototype.map = function (inputScaleMin, inputScaleMax, outputScaleMin, o
 dcl.image = function (img, x, y, w, h, scale = 1, ctx = null) {
     ctx = dcl.getCtx(ctx);
     if (img.isSprite) {
-        let sx = img.x;
-        let sy = img.y;
+        let sx = img.pos.x;
+        let sy = img.pos.y;
         let sw = img.width;
         let sh = img.height;
         let dx = x;
         let dy = y;
-        let dw = w * scale;
-        let dh = h * scale;
+        let dw = w ? w * scale : img.width;
+        let dh = h ? h * scale : img.height;
         ctx.drawImage(img.img, sx, sy, sw, sh, dx, dy, dw, dh);
     } else {
         ctx.drawImage(img, x, y, w * scale, h * scale);
