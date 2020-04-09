@@ -82,6 +82,7 @@ var dcl = function () {
         }
     };
 }();
+
 dcl.const = {
     phi: (1 + Math.sqrt(5)) / 2,
     iphi: 2 / (1 + Math.sqrt(5)),
@@ -341,7 +342,7 @@ dcl.rect = function (x, y, width, height, color, lineWidth, lineColor, ctx) {
     if (color.isColor) {
         color = color.toStyle();
     }
-    if(lineColor && lineColor.isColor){
+    if (lineColor && lineColor.isColor) {
         lineColor = lineColor.toStyle();
     }
     ctx.fillStyle = color || "blue";
@@ -609,6 +610,17 @@ dcl.palette = (function () {
     };
 })();
 
+const RED = dcl.color(255, 0, 0);
+const MAGENTA = dcl.color(255, 0, 255);
+const YELLOW = dcl.color(255, 255, 0);
+const GREEN = dcl.color(0, 255, 0);
+const CYAN = dcl.color(0, 255, 255);
+const BLUE = dcl.color(0, 0, 255);
+const TRANS = dcl.color(0, 0, 0, 0);
+const BLACK = dcl.color(0, 0, 0);
+const WHITE = dcl.color(255, 255, 255);
+const GRAY = dcl.color(128, 128, 128);
+
 const PI = Math.PI;
 const E = Math.E;
 
@@ -710,13 +722,53 @@ dcl.complex = function (re, im) {
     }
 }
 
-const RED = dcl.color(255, 0, 0);
-const MAGENTA = dcl.color(255, 0, 255);
-const YELLOW = dcl.color(255, 255, 0);
-const GREEN = dcl.color(0, 255, 0);
-const CYAN = dcl.color(0, 255, 255);
-const BLUE = dcl.color(0, 0, 255);
-const TRANS = dcl.color(0, 0, 0, 0);
-const BLACK = dcl.color(0, 0, 0);
-const WHITE = dcl.color(255, 255, 255);
-const GRAY = dcl.color(128, 128, 128);
+dcl.sprite = function (spriteSheet, pos, width, height) {
+    let states = [];
+    let buffer = document.createElement("canvas");
+    buffer.width = spriteSheet.width;
+    buffer.height = spriteSheet.height;
+    let p = pos;
+    let c = buffer.getContext("2d");
+    c.drawImage(spriteSheet, 0, 0);
+
+    function getBbox(sprite) {
+        return { x: sprite.pos.x, y: sprite.pos.y, w: sprite.width, h: sprite.height };
+    }
+
+
+    function getPixel(x, y) {
+        let pixel = c.getImageData(x, y, 1, 1).data;
+        return pixel;
+    }
+
+    function boundingBoxCollision(a, b) {
+        return ((a.x + a.width) >= b.x) &&
+            (a.x <= (b.x + b.w)) &&
+            ((a.y + a.height) >= b.height) &&
+            (a.y <= (b.y + b.height));
+    }
+
+    return {
+        add: function (state, x, y) {
+            states[state] = {
+                state: state,
+                pos: dcl.vector(x, y)
+            };
+        },
+        draw(state, ctx) {
+            ctx = getCtx(ctx);
+            let sprite = states[state];
+            if (sprite) {
+                ctx.drawImage(spriteSheet, state.pos.x, state.pos.y, width, height, p.x, p.y, width, height);
+            }
+        },
+        pos: p,
+        width: width,
+        height: height,
+        collidesWith: function (b) {
+            return boundingBoxCollision({ x: p.x, y: p.y, w: width, h: height }, getBbos(b));
+        }
+
+    }
+}
+
