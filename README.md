@@ -7,17 +7,31 @@ Install via npm: ```npm install --save drcircuitscanvaslibrary ```
 Usage:
 ```javascript
 (function(){
-    var scr;
+    let scr;
   
     function setup() {
         scr = dcl.setupScreen(window.innerWidth ,window.innerHeight );
         scr.setBgColor('darkblue');
         document.body.style.backgroundColor = 'darkblue';      
     }
-
-    setup();
+    function draw(t, dt){
+       // your drawing and update logic here..
+    }
+    dcl.init(setup, draw);
+    dcl.animate();
 })();
 ```
+
+# Examples:
+* [Cube](/examples/cube.html)
+* [Curve](/examples/curve.html)
+* [Dodecahedron](/examples/dodecahedron.html)
+* [Dual tetrahedron](/examples/dualtetrahedron.html)
+* [Keyboard](/examples/keyboard.html)
+* [Mouse](/examples/mouse.html)
+* [Shapes](/examples/shapes.html)
+* [Tetrahedron](/examples/tetrahedron.html)
+* [Triangle](/examples/triangle.html)
 
 # setupScreen function
 setupScreen: function (width, height, keepSquare, gridScale)
@@ -94,9 +108,10 @@ dcl.circle: function(x, y, dx, dy, lineWidth, lineColor, ctx)
 ## void
 This method draws a line based on the given parameters.
 
-# draw or dcl.draw function
-the function that will be called in the render loop once dcl.animate is called.
-This function is implemented by you.
+# dcl.init function
+## Parameters:
+* setup a function to setup your scene
+* draw a function that will run in a loop rendering your scene
 
 # dcl.animate function
 This function starts the render loop.
