@@ -11,6 +11,23 @@ const tan = Math.tan;
 const atan = Math.atan;
 const atan2 = Math.atan2;
 const pow = Math.pow;
+const sqrt = Math.sqrt;
+const MOUSE = {
+    pos: null,
+    clickLeft: false,
+    clickRight: false
+}
+const KEYB = {
+    keyPressed: -1,
+    ctrlPressed: false,
+    altPressed: false,
+    shiftPressed: false
+}
+
+MOUSE.reset = function(){
+    MOUSE.clickLeft = false;
+    MOUSE.clickRight = false;
+}
 
 var dcl = function () {
 
@@ -64,6 +81,41 @@ var dcl = function () {
             }
             dcl.renderContext = canvas.getContext('2d');
             dcl.screen = { width: canvas.width, height: canvas.height };
+            MOUSE.pos = dcl.vector(width/2, height/2);
+            document.addEventListener("keydown", (e)=>{
+                KEYB.keyPressed = e.keyCode;
+                KEYB.altPressed = e.altKey;
+                KEYB.ctrlPressed = e.ctrlKey;
+                KEYB.shiftPressed = e.shiftKey;
+                //console.log(e.key);
+            });
+            document.addEventListener("keyup", (e)=>{
+                KEYB.keyPressed = -1;
+                KEYB.altPressed = false;
+                KEYB.ctrlPressed = false;
+                KEYB.shiftPressed = false;
+                
+            });
+            canvas.addEventListener("mousemove", (e)=>{
+                MOUSE.pos = dcl.vector(e.offsetX, e.offsetY);
+            });
+            canvas.addEventListener("contextmenu", ( e )=> { e.preventDefault(); return false; } );
+            canvas.addEventListener("mousedown", (e)=>{
+                e.preventDefault();
+                if(e.button === 0){
+                    MOUSE.clickLeft = true;
+                    MOUSE.clickRight = false;
+                } else if(e.button === 2){
+                    MOUSE.clickLeft = false;
+                    MOUSE.clickRight = true;
+                }
+                return false;
+            });
+            canvas.addEventListener("mouseup", (ev)=>{
+                ev.preventDefault();
+                MOUSE.reset();
+                return false;
+            });
             return {
                 ctx: dcl.renderContext,
                 width: canvas.width,
@@ -324,13 +376,35 @@ dcl.clear = function (ctx) {
     ctx = dcl.getCtx(ctx);
     ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
 };
+dcl.setupRun = false;
+
+dcl.setup = function (){
+
+}
+
+dcl.reset = function(){
+    dcl.setupRun = false;
+    dcl.clear();
+}
+
+dcl.init = function(setup, draw){
+    dcl.setup = setup;
+    dcl.draw = draw;
+}
+let last = 0;
 dcl.animate = function (t) {
+    let dt = (t-last)/50;
+    if(!dcl.setupRun){
+        dcl.setup();
+        dcl.setupRun = true;
+    }
     var render = dcl.draw || draw;
     if (render) {
         if (dcl.clearEachFrame) {
             dcl.clear();
         }
-        render(t);
+        render(t, dt);
+        last = t;
         if (dcl.playAnimation) {
             requestAnimationFrame(dcl.animate);
         }
@@ -434,7 +508,7 @@ dcl.curve = {
         ctx = dcl.getCtx(ctx);
         dcl.stroke(color, width, ctx);
     },
-    plot: function (points, lineColor, lineWidth) {
+    plot: function (points, lineColor, lineWidth, fillColor) {
         if (!points.forEach) {
             console.error("Error! you must supply an array with coordinates as an argument to this function.");
             return;
@@ -443,8 +517,12 @@ dcl.curve = {
             if (i === 0) {
                 dcl.curve.start(p.x, p.y);
             } else if (i === a.length - 1) {
-                dcl.curve.stroke(lineColor, lineWidth);
+                dcl.curve.vertex(p.x, p.y);                
                 dcl.curve.end();
+                dcl.curve.stroke(lineColor, lineWidth);
+                if(fillColor){
+                    dcl.curve.fill(fillColor);
+                }
             } else {
                 dcl.curve.vertex(p.x, p.y);
             }
@@ -623,6 +701,7 @@ const GRAY = dcl.color(128, 128, 128);
 
 const PI = Math.PI;
 const E = Math.E;
+const TAU = PI*2;
 
 const KEYS = {
     LEFT: 37,
@@ -759,7 +838,7 @@ dcl.sprite = function (spriteSheet, pos, width, height) {
             ctx = getCtx(ctx);
             let sprite = states[state];
             if (sprite) {
-                ctx.drawImage(spriteSheet, state.pos.x, state.pos.y, width, height, p.x, p.y, width, height);
+                ctx.drawImage(spriteSheet, sprite.pos.x, sprite.pos.y, width, height, p.x, p.y, width, height);
             }
         },
         pos: p,
