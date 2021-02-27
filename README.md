@@ -1,4 +1,4 @@
-# DrCircuitsCanvasLibrary
+# [DrCircuitsCanvasLibrary](https://drcircuit.github.io/DrCircuitsCanvasLibrary/) click to view examples live
 A tiny library for doing boilerplate stuff for canvas based vanilla js gfx and game projects.
 
 Installation:
