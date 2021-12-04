@@ -668,6 +668,80 @@ dcl.palette = (function () {
     let fire = [];
     let gray = [];
     let rainbow = [];
+    let ega = [
+        dcl.color(0,0,0,1.0),
+        dcl.color(0,0,0xAA,1.0),
+        dcl.color(0,0xAA,0,1.0),
+        dcl.color(0,0xAA,0xAA,1.0),
+        dcl.color(0xAA,0,0,1.0),
+        dcl.color(0xAA,0,0xAA,1.0),
+        dcl.color(0xAA,0xAA,0,1.0),
+        dcl.color(0xAA,0xAA,0xAA,1.0),
+        dcl.color(0,0,0x55,1.0),
+        dcl.color(0,0,0xFF,1.0),
+        dcl.color(0,0xAA,0x55,1.0),
+        dcl.color(0,0xAA,0xFF,1.0),
+        dcl.color(0xAA,0,0x55,1.0),
+        dcl.color(0xAA,0,0xFF,1.0),
+        dcl.color(0,0x55,0,1.0),
+        dcl.color(0,0x55,0xAA,1.0),
+        dcl.color(0xAA,0x55,0,1.0),
+        dcl.color(0xAA,0x55,0xAA,1.0),
+        dcl.color(0,0x55,0x55,1.0),
+        dcl.color(0,0x55,0xFF,1.0),
+        dcl.color(0,0xFF,0xFF,1.0),
+        dcl.color(0xAA,0x55,0x55,1.0),
+        dcl.color(0xAA,0x55,0xFF,1.0),
+        dcl.color(0xAA,0xFF,0x55,1.0),
+        dcl.color(0xAA,0xFF,0xFF,1.0),
+        dcl.color(0x55,0,0,1.0),
+        dcl.color(0x55,0,0xAA,1.0),
+        dcl.color(0x55,0xAA,0,1.0),
+        dcl.color(0x55,0xAA,0xAA,1.0),
+        dcl.color(0xFF,0,0,1.0),
+        dcl.color(0xFF,0,0xAA,1.0),
+        dcl.color(0xFF,0xAA,0,1.0),
+        dcl.color(0xFF,0xAA,0xAA,1.0),
+        dcl.color(0x55,0,0x55,1.0),
+        dcl.color(0x55,0,0xFF,1.0),
+        dcl.color(0x55,0xAA,0x55,1.0),
+        dcl.color(0x55,0xAA,0xFF,1.0),
+        dcl.color(0xFF,0,0x55,1.0),
+        dcl.color(0xFF,0,0xFF,1.0),
+        dcl.color(0xFF,0xAA,0x55,1.0),
+        dcl.color(0xFF,0xFF,0xFF,1.0),
+        dcl.color(0x55,0x55,0,1.0),
+        dcl.color(0x55,0x55,0xAA,1.0),
+        dcl.color(0x55,0x55,0x55,1.0),
+        dcl.color(0x55,0x55,0xFF,1.0),
+        dcl.color(0x55,0xFF,0x55,1.0),
+        dcl.color(0x55,0xFF,0xFF,1.0),
+        dcl.color(0xFF,0x55,0x55,1.0),
+        dcl.color(0xFF,0x55,0xFF,1.0),
+        dcl.color(0xFF,0xFF,0x55,1.0),
+        dcl.color(0xFF,0xFF,0xFF,1.0)        
+    ];
+    let cga = [
+        dcl.color(0,0,0,1.0),
+        dcl.color(0,0,170,1.0),
+        dcl.color(0,170,0,1.0),
+        dcl.color(0,170,170,1.0),
+        
+        dcl.color(170,0,0,1.0),
+        dcl.color(170,0,170,1.0),
+        dcl.color(170,85,0,1.0),
+        dcl.color(170,170,170,1.0),
+        
+        dcl.color(85,85,85,1.0),
+        dcl.color(85,85,255,1.0),
+        dcl.color(85,255,85,1.0),
+        dcl.color(85,255,255,1.0),
+
+        dcl.color(255,85,85,1.0),
+        dcl.color(255,85,255,1.0),
+        dcl.color(255,255,85,1.0),
+        dcl.color(255,255,255,1.0)
+    ];
     for (let i = 0; i < 256; i++) {
         gray.push(dcl.color(i, i, i));
     }
@@ -684,7 +758,9 @@ dcl.palette = (function () {
     return {
         fire: fire,
         rainbow: rainbow,
-        gray: gray
+        gray: gray,
+        cga: cga,
+        ega: ega
     };
 })();
 
