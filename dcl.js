@@ -741,6 +741,7 @@ dcl.palette = (function () {
         dcl.color(0xFF,0xFF,0x55,1.0),
         dcl.color(0xFF,0xFF,0xFF,1.0)        
     ];
+    let egadef = [ega[0],ega[1],ega[2],ega[3], ega[4],ega[5], ega[0x14], ega[7], ega[0x38], ega[0x39], ega[0x3A],ega[0x3B], ega[0x3C], ega[0x3D], ega[0x3E], ega[0x3F] ];
     let cga = [
         dcl.color(0,0,0,1.0),
         dcl.color(0,0,170,1.0),
@@ -780,7 +781,8 @@ dcl.palette = (function () {
         rainbow: rainbow,
         gray: gray,
         cga: cga,
-        ega: ega
+        ega: ega,
+        egadef: egadef
     };
 })();
 
