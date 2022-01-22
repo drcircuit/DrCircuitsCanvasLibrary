@@ -83,7 +83,7 @@ var dcl = function () {
             dcl.screen = { width: canvas.width, height: canvas.height };
             MOUSE.pos = dcl.vector(width/2, height/2);
             document.addEventListener("keydown", (e)=>{
-                KEYB.keyPressed = e.keyCode;
+                KEYB.keyPressed = e.which;
                 KEYB.altPressed = e.altKey;
                 KEYB.ctrlPressed = e.ctrlKey;
                 KEYB.shiftPressed = e.shiftKey;
@@ -856,6 +856,7 @@ const KEYS = {
 }
 
 dcl.complex = function (re, im) {
+    let arg = Math.sqrt(re * re + im * im);
     return {
         re: re,
         im: im,
@@ -892,9 +893,16 @@ dcl.complex = function (re, im) {
                 return a.div(b.re);
             }
         },
-        arg: Math.sqrt(re * re + im * im),
+        arg: arg,
         con: function () {
             return dcl.complex(re, -im);
+        }, 
+        pow: function(e){
+            let th = atan2(im, re);
+            let the = e * th;
+            let r = pow(th, e) * cos(the);
+            let i = pow(th, e) * sin(the);
+            return dcl.complex(r, i);
         }
     }
 }
