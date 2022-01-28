@@ -856,7 +856,9 @@ const KEYS = {
 }
 
 dcl.complex = function (re, im) {
-    let arg = Math.sqrt(re * re + im * im);
+    let mod = Math.sqrt(re * re + im * im);
+    let arg = atan2(im, re);
+
     return {
         re: re,
         im: im,
@@ -894,14 +896,16 @@ dcl.complex = function (re, im) {
             }
         },
         arg: arg,
+        mod: mod,
         con: function () {
             return dcl.complex(re, -im);
         }, 
         pow: function(e){
-            let th = atan2(im, re);
-            let the = e * th;
-            let r = pow(th, e) * cos(the);
-            let i = pow(th, e) * sin(the);
+            let the = e * arg;   
+            let mode = pow(mod, e);
+            let r = mode * cos(the);
+            let i = mode * sin(the);
+            
             return dcl.complex(r, i);
         }
     }
