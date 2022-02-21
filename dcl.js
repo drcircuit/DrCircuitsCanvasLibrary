@@ -68,6 +68,24 @@ var dcl = function () {
     }
 
     return {
+        createBuffer: function(width, height){
+            let canvas = document.createElement("canvas");
+            setCanvasSize(canvas, width, height);
+            let ctx = canvas.getContext("2d");  
+            return {
+                canvas: canvas,
+                buffer: ctx,
+                capture: function(){
+                    return ctx.getImageData(0,0, width, height);
+                },
+                clear: function(color){
+                    dcl.clear(color, ctx);
+                }, 
+                paint: function(imageData, x = 0, y = 0){
+                    ctx.putImageData(imageData,x,y)
+                }
+            }
+        },
         setupScreen: function (width, height, keepSquare, gridScale, parent) {
             var canvas = document.createElement('canvas');
             canvas.id = 'space';
