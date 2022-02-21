@@ -372,9 +372,18 @@ dcl.random = function (min, max) {
 dcl.randomi = function (min, max) {
     return Math.floor(dcl.random(min, max));
 };
-dcl.clear = function (ctx) {
+dcl.clear = function (color, ctx) {
     ctx = dcl.getCtx(ctx);
-    ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
+    if(color){
+        if(color.isColor){
+            color = color.toStyle();
+        }
+        ctx.fillStyle = color;
+        ctx.fillRect(0, 0, dcl.screen.width, dcl.screen.height);
+    } else
+    {
+        ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
+    }
 };
 dcl.setupRun = false;
 
