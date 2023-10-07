@@ -17,7 +17,9 @@ const max = Math.max;
 const clamp = function (n, mn, mx) {
     return min(max(n, mn), mx);
 }
-
+const fract = function (n) {
+    return n - floor(n);
+}
 const lerp = function (a, b, t) {
     return a + (b - a) * t;
 }
@@ -387,6 +389,114 @@ dcl.vector = function (x, y, z, w) {
         },
         round: function () {
             return dcl.vector(round(x), round(y), round(z), round(w));
+        },
+        fract: function (){
+            return dcl.vector(fract(x), fract(y), fract(z), fract(w));
+        },
+        cos: function () {
+            return dcl.vector(cos(x), cos(y), cos(z), cos(w));
+        },
+        sin: function () {
+            return dcl.vector(sin(x), sin(y), sin(z), sin(w));
+        },
+        yxz: function(){
+            return dcl.vector(y, x, z, w);
+        },
+        zxy: function(){
+            return dcl.vector(z, x, y, w);
+        },
+        xzy: function(){
+            return dcl.vector(x, z, y, w);
+        },
+        yzx: function(){
+            return dcl.vector(y, z, x, w);
+        },
+        zyx: function(){
+            return dcl.vector(z, y, x, w);
+        },
+        xyz: function(){
+            return dcl.vector(x, y, z, w);
+        },
+        xy: function(){
+            return dcl.vector(x, y);
+        },
+        xz: function(){
+            return dcl.vector(x, z);
+        },
+        yz: function(){
+            return dcl.vector(y, z);
+        },
+        yx: function(){
+            return dcl.vector(y, x);
+        },
+        zx: function(){
+            return dcl.vector(z, x);
+        },
+        zy: function(){
+            return dcl.vector(z, y);
+        },
+        xxy: function(){
+            return dcl.vector(x, x, y);
+        },
+        xxz: function(){
+            return dcl.vector(x, x, z);
+        },  
+        yyx: function(){
+            return dcl.vector(y, y, x);
+        },
+        yyz: function(){
+            return dcl.vector(y, y, z);
+        },
+        zzx: function(){
+            return dcl.vector(z, z, x);
+        },
+        zzy: function(){
+            return dcl.vector(z, z, y);
+        },
+        xxx: function(){
+            return dcl.vector(x, x, x);
+        },
+        yyy: function(){
+            return dcl.vector(y, y, y);
+        },
+        zzz: function(){
+            return dcl.vector(z, z, z);
+        },
+        xyx: function(){
+            return dcl.vector(x, y, x);
+        },
+        xzx: function(){
+            return dcl.vector(x, z, x);
+        },
+        yxy: function(){
+            return dcl.vector(y, x, y);
+        },
+        yzy: function(){
+            return dcl.vector(y, z, y);
+        },
+        zxz: function(){
+            return dcl.vector(z, x, z);
+        },
+        zyz: function(){
+            return dcl.vector(z, y, z);
+        },
+        xyy: function(){
+            return dcl.vector(x, y, y);
+        },
+        xzz: function(){
+            return dcl.vector(x, z, z);
+        },
+        yxx: function(){
+            return dcl.vector(y, x, x);
+        },
+        yzz: function(){
+            return dcl.vector(y, z, z);
+        },
+        zxx: function(){
+            return dcl.vector(z, x, x);
+        },
+        zyy: function(){
+            return dcl.vector(z, y, y);
         },
         magsqr: magsqr,
         isVector: true
