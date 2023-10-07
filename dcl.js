@@ -14,6 +14,9 @@ const pow = Math.pow;
 const sqrt = Math.sqrt;
 const min = Math.min;
 const max = Math.max;
+const mod = function (n, m) {
+    n - floor(n / m) * m;
+}
 const clamp = function (n, mn, mx) {
     return min(max(n, mn), mx);
 }
