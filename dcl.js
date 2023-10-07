@@ -17,6 +17,10 @@ const max = Math.max;
 const clamp = function (n, mn, mx) {
     return min(max(n, mn), mx);
 }
+
+const lerp = function (a, b, t) {
+    return a + (b - a) * t;
+}
 const MOUSE = {
     pos: null,
     clickLeft: false,
@@ -29,7 +33,7 @@ const KEYB = {
     shiftPressed: false
 }
 
-MOUSE.reset = function(){
+MOUSE.reset = function () {
     MOUSE.clickLeft = false;
     MOUSE.clickRight = false;
 }
@@ -73,21 +77,21 @@ var dcl = function () {
     }
 
     return {
-        createBuffer: function(width, height){
+        createBuffer: function (width, height) {
             let canvas = document.createElement("canvas");
             setCanvasSize(canvas, width, height);
-            let ctx = canvas.getContext("2d");  
+            let ctx = canvas.getContext("2d");
             return {
                 canvas: canvas,
                 buffer: ctx,
-                capture: function(){
-                    return ctx.getImageData(0,0, width, height);
+                capture: function () {
+                    return ctx.getImageData(0, 0, width, height);
                 },
-                clear: function(color){
+                clear: function (color) {
                     dcl.clear(color, ctx);
-                }, 
-                paint: function(imageData, x = 0, y = 0){
-                    ctx.putImageData(imageData,x,y)
+                },
+                paint: function (imageData, x = 0, y = 0) {
+                    ctx.putImageData(imageData, x, y)
                 }
             }
         },
@@ -104,37 +108,37 @@ var dcl = function () {
             }
             dcl.renderContext = canvas.getContext('2d');
             dcl.screen = { width: canvas.width, height: canvas.height };
-            MOUSE.pos = dcl.vector(width/2, height/2);
-            document.addEventListener("keydown", (e)=>{
+            MOUSE.pos = dcl.vector(width / 2, height / 2);
+            document.addEventListener("keydown", (e) => {
                 KEYB.keyPressed = e.which;
                 KEYB.altPressed = e.altKey;
                 KEYB.ctrlPressed = e.ctrlKey;
                 KEYB.shiftPressed = e.shiftKey;
                 //console.log(e.key);
             });
-            document.addEventListener("keyup", (e)=>{
+            document.addEventListener("keyup", (e) => {
                 KEYB.keyPressed = -1;
                 KEYB.altPressed = false;
                 KEYB.ctrlPressed = false;
                 KEYB.shiftPressed = false;
-                
+
             });
-            canvas.addEventListener("mousemove", (e)=>{
+            canvas.addEventListener("mousemove", (e) => {
                 MOUSE.pos = dcl.vector(e.offsetX, e.offsetY);
             });
-            canvas.addEventListener("contextmenu", ( e )=> { e.preventDefault(); return false; } );
-            canvas.addEventListener("mousedown", (e)=>{
+            canvas.addEventListener("contextmenu", (e) => { e.preventDefault(); return false; });
+            canvas.addEventListener("mousedown", (e) => {
                 e.preventDefault();
-                if(e.button === 0){
+                if (e.button === 0) {
                     MOUSE.clickLeft = true;
                     MOUSE.clickRight = false;
-                } else if(e.button === 2){
+                } else if (e.button === 2) {
                     MOUSE.clickLeft = false;
                     MOUSE.clickRight = true;
                 }
                 return false;
             });
-            canvas.addEventListener("mouseup", (ev)=>{
+            canvas.addEventListener("mouseup", (ev) => {
                 ev.preventDefault();
                 MOUSE.reset();
                 return false;
@@ -404,36 +408,35 @@ dcl.randomi = function (min, max) {
 };
 dcl.clear = function (color, ctx) {
     ctx = dcl.getCtx(ctx);
-    if(color){
-        if(color.isColor){
+    if (color) {
+        if (color.isColor) {
             color = color.toStyle();
         }
         ctx.fillStyle = color;
         ctx.fillRect(0, 0, dcl.screen.width, dcl.screen.height);
-    } else
-    {
+    } else {
         ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
     }
 };
 dcl.setupRun = false;
 
-dcl.setup = function (){
+dcl.setup = function () {
 
 }
 
-dcl.reset = function(){
+dcl.reset = function () {
     dcl.setupRun = false;
     dcl.clear();
 }
 
-dcl.init = function(setup, draw){
+dcl.init = function (setup, draw) {
     dcl.setup = setup;
     dcl.draw = draw;
 }
 let last = 0;
 dcl.animate = function (t) {
-    let dt = (t-last)/50;
-    if(!dcl.setupRun){
+    let dt = (t - last) / 50;
+    if (!dcl.setupRun) {
         dcl.setup();
         dcl.setupRun = true;
     }
@@ -556,10 +559,10 @@ dcl.curve = {
             if (i === 0) {
                 dcl.curve.start(p.x, p.y);
             } else if (i === a.length - 1) {
-                dcl.curve.vertex(p.x, p.y);                
+                dcl.curve.vertex(p.x, p.y);
                 dcl.curve.end();
                 dcl.curve.stroke(lineColor, lineWidth);
-                if(fillColor){
+                if (fillColor) {
                     dcl.curve.fill(fillColor);
                 }
             } else {
@@ -578,7 +581,14 @@ dcl.color = function (red, green, blue, alpha = 1.0) {
         toStyle: function () {
             return "rgba(" + red + "," + green + "," + blue + "," + alpha.toFixed(2) + ")";
         },
-        isColor: true
+        isColor: true,
+        lerp: function (color, t) {
+            let nr = floor(lerp(red, color.r, t));
+            let ng = floor(lerp(green, color.g, t));
+            let nb = floor(lerp(blue, color.b, t));
+            let na = lerp(alpha, color.a, t);
+            return dcl.color(nr, ng, nb, na);
+        }
     };
 }
 dcl.color.hue2rgb = function (p, q, t) {
@@ -708,99 +718,99 @@ dcl.palette = (function () {
     let gray = [];
     let rainbow = [];
     let ega = [
-        dcl.color(0,0,0,1.0),
-        dcl.color(0,0,0xAA,1.0),
-        dcl.color(0,0xAA,0,1.0),
-        dcl.color(0,0xAA,0xAA,1.0),
-        dcl.color(0xAA,0,0,1.0),
-        dcl.color(0xAA,0,0xAA,1.0),
-        dcl.color(0xAA,0xAA,0,1.0),
-        dcl.color(0xAA,0xAA,0xAA,1.0),
+        dcl.color(0, 0, 0, 1.0),
+        dcl.color(0, 0, 0xAA, 1.0),
+        dcl.color(0, 0xAA, 0, 1.0),
+        dcl.color(0, 0xAA, 0xAA, 1.0),
+        dcl.color(0xAA, 0, 0, 1.0),
+        dcl.color(0xAA, 0, 0xAA, 1.0),
+        dcl.color(0xAA, 0xAA, 0, 1.0),
+        dcl.color(0xAA, 0xAA, 0xAA, 1.0),
 
-        dcl.color(0,0,0x55,1.0),
-        dcl.color(0,0,0xFF,1.0),
-        dcl.color(0,0xAA,0x55,1.0),
-        dcl.color(0,0xAA,0xFF,1.0),
-        dcl.color(0xAA,0,0x55,1.0),
-        dcl.color(0xAA,0,0xFF,1.0),
-        dcl.color(0xAA,0xAA,0x55,1.0),
-        dcl.color(0xAA,0xAA,0xFF,1.0),
+        dcl.color(0, 0, 0x55, 1.0),
+        dcl.color(0, 0, 0xFF, 1.0),
+        dcl.color(0, 0xAA, 0x55, 1.0),
+        dcl.color(0, 0xAA, 0xFF, 1.0),
+        dcl.color(0xAA, 0, 0x55, 1.0),
+        dcl.color(0xAA, 0, 0xFF, 1.0),
+        dcl.color(0xAA, 0xAA, 0x55, 1.0),
+        dcl.color(0xAA, 0xAA, 0xFF, 1.0),
 
-        dcl.color(0,0x55,0,1.0),
-        dcl.color(0,0x55,0xAA,1.0),
-        dcl.color(0,0xFF,0,1.0),
-        dcl.color(0,0xFF,0xAA,1.0),
-        dcl.color(0xAA,0x55,0,1.0),
-        dcl.color(0xAA,0x55,0xAA,1.0),
-        dcl.color(0xAA, 0xFF,0, 1.0),
-        dcl.color(0xAA, 0xFF,0xAA, 1.0),
+        dcl.color(0, 0x55, 0, 1.0),
+        dcl.color(0, 0x55, 0xAA, 1.0),
+        dcl.color(0, 0xFF, 0, 1.0),
+        dcl.color(0, 0xFF, 0xAA, 1.0),
+        dcl.color(0xAA, 0x55, 0, 1.0),
+        dcl.color(0xAA, 0x55, 0xAA, 1.0),
+        dcl.color(0xAA, 0xFF, 0, 1.0),
+        dcl.color(0xAA, 0xFF, 0xAA, 1.0),
 
-        dcl.color(0,0x55,0x55,1.0),
-        dcl.color(0,0x55,0xFF,1.0),
-        dcl.color(0,0xFF,0x55,1.0),
-        dcl.color(0,0xFF,0xFF,1.0),
-        dcl.color(0xAA,0x55,0x55,1.0),
-        dcl.color(0xAA,0x55,0xFF,1.0),
-        dcl.color(0xAA,0xFF,0x55,1.0),
-        dcl.color(0xAA,0xFF,0xFF,1.0),
+        dcl.color(0, 0x55, 0x55, 1.0),
+        dcl.color(0, 0x55, 0xFF, 1.0),
+        dcl.color(0, 0xFF, 0x55, 1.0),
+        dcl.color(0, 0xFF, 0xFF, 1.0),
+        dcl.color(0xAA, 0x55, 0x55, 1.0),
+        dcl.color(0xAA, 0x55, 0xFF, 1.0),
+        dcl.color(0xAA, 0xFF, 0x55, 1.0),
+        dcl.color(0xAA, 0xFF, 0xFF, 1.0),
 
-        dcl.color(0x55,0,0,1.0),
-        dcl.color(0x55,0,0xAA,1.0),
-        dcl.color(0x55,0xAA,0,1.0),
-        dcl.color(0x55,0xAA,0xAA,1.0),
-        dcl.color(0xFF,0,0,1.0),
-        dcl.color(0xFF,0,0xAA,1.0),
-        dcl.color(0xFF,0xAA,0,1.0),
-        dcl.color(0xFF,0xAA,0xAA,1.0),
-                
-        dcl.color(0x55,0,0x55,1.0),
-        dcl.color(0x55,0,0xFF,1.0),
-        dcl.color(0x55,0xAA,0x55,1.0),
-        dcl.color(0x55,0xAA,0xFF,1.0),
-        dcl.color(0xFF,0,0x55,1.0),
-        dcl.color(0xFF,0,0xFF,1.0),
-        dcl.color(0xFF,0xAA,0x55,1.0),
-        dcl.color(0xFF,0xFF,0xFF,1.0),
+        dcl.color(0x55, 0, 0, 1.0),
+        dcl.color(0x55, 0, 0xAA, 1.0),
+        dcl.color(0x55, 0xAA, 0, 1.0),
+        dcl.color(0x55, 0xAA, 0xAA, 1.0),
+        dcl.color(0xFF, 0, 0, 1.0),
+        dcl.color(0xFF, 0, 0xAA, 1.0),
+        dcl.color(0xFF, 0xAA, 0, 1.0),
+        dcl.color(0xFF, 0xAA, 0xAA, 1.0),
 
-        dcl.color(0x55,0x55,0,1.0),
-        dcl.color(0x55,0x55,0xAA,1.0),
-        dcl.color(0x55,0xFF,0,1.0),
-        dcl.color(0x55,0xFF,0xAA,1.0),
-        dcl.color(0xFF,0x55,0,1.0),
-        dcl.color(0xFF,0x55,0xAA,1.0),
-        dcl.color(0xFF,0xFF,0,1.0),
-        dcl.color(0xFF,0xFF,0xAA,1.0),
+        dcl.color(0x55, 0, 0x55, 1.0),
+        dcl.color(0x55, 0, 0xFF, 1.0),
+        dcl.color(0x55, 0xAA, 0x55, 1.0),
+        dcl.color(0x55, 0xAA, 0xFF, 1.0),
+        dcl.color(0xFF, 0, 0x55, 1.0),
+        dcl.color(0xFF, 0, 0xFF, 1.0),
+        dcl.color(0xFF, 0xAA, 0x55, 1.0),
+        dcl.color(0xFF, 0xFF, 0xFF, 1.0),
 
-        dcl.color(0x55,0x55,0x55,1.0),
-        dcl.color(0x55,0x55,0xFF,1.0),
-        dcl.color(0x55,0xFF,0x55,1.0),
-        dcl.color(0x55,0xFF,0xFF,1.0),
-        dcl.color(0xFF,0x55,0x55,1.0),
-        dcl.color(0xFF,0x55,0xFF,1.0),
-        dcl.color(0xFF,0xFF,0x55,1.0),
-        dcl.color(0xFF,0xFF,0xFF,1.0)        
+        dcl.color(0x55, 0x55, 0, 1.0),
+        dcl.color(0x55, 0x55, 0xAA, 1.0),
+        dcl.color(0x55, 0xFF, 0, 1.0),
+        dcl.color(0x55, 0xFF, 0xAA, 1.0),
+        dcl.color(0xFF, 0x55, 0, 1.0),
+        dcl.color(0xFF, 0x55, 0xAA, 1.0),
+        dcl.color(0xFF, 0xFF, 0, 1.0),
+        dcl.color(0xFF, 0xFF, 0xAA, 1.0),
+
+        dcl.color(0x55, 0x55, 0x55, 1.0),
+        dcl.color(0x55, 0x55, 0xFF, 1.0),
+        dcl.color(0x55, 0xFF, 0x55, 1.0),
+        dcl.color(0x55, 0xFF, 0xFF, 1.0),
+        dcl.color(0xFF, 0x55, 0x55, 1.0),
+        dcl.color(0xFF, 0x55, 0xFF, 1.0),
+        dcl.color(0xFF, 0xFF, 0x55, 1.0),
+        dcl.color(0xFF, 0xFF, 0xFF, 1.0)
     ];
-    let egadef = [ega[0],ega[1],ega[2],ega[3], ega[4],ega[5], ega[0x14], ega[7], ega[0x38], ega[0x39], ega[0x3A],ega[0x3B], ega[0x3C], ega[0x3D], ega[0x3E], ega[0x3F] ];
+    let egadef = [ega[0], ega[1], ega[2], ega[3], ega[4], ega[5], ega[0x14], ega[7], ega[0x38], ega[0x39], ega[0x3A], ega[0x3B], ega[0x3C], ega[0x3D], ega[0x3E], ega[0x3F]];
     let cga = [
-        dcl.color(0,0,0,1.0),
-        dcl.color(0,0,170,1.0),
-        dcl.color(0,170,0,1.0),
-        dcl.color(0,170,170,1.0),
-        
-        dcl.color(170,0,0,1.0),
-        dcl.color(170,0,170,1.0),
-        dcl.color(170,85,0,1.0),
-        dcl.color(170,170,170,1.0),
-        
-        dcl.color(85,85,85,1.0),
-        dcl.color(85,85,255,1.0),
-        dcl.color(85,255,85,1.0),
-        dcl.color(85,255,255,1.0),
+        dcl.color(0, 0, 0, 1.0),
+        dcl.color(0, 0, 170, 1.0),
+        dcl.color(0, 170, 0, 1.0),
+        dcl.color(0, 170, 170, 1.0),
 
-        dcl.color(255,85,85,1.0),
-        dcl.color(255,85,255,1.0),
-        dcl.color(255,255,85,1.0),
-        dcl.color(255,255,255,1.0)
+        dcl.color(170, 0, 0, 1.0),
+        dcl.color(170, 0, 170, 1.0),
+        dcl.color(170, 85, 0, 1.0),
+        dcl.color(170, 170, 170, 1.0),
+
+        dcl.color(85, 85, 85, 1.0),
+        dcl.color(85, 85, 255, 1.0),
+        dcl.color(85, 255, 85, 1.0),
+        dcl.color(85, 255, 255, 1.0),
+
+        dcl.color(255, 85, 85, 1.0),
+        dcl.color(255, 85, 255, 1.0),
+        dcl.color(255, 255, 85, 1.0),
+        dcl.color(255, 255, 255, 1.0)
     ];
     for (let i = 0; i < 256; i++) {
         gray.push(dcl.color(i, i, i));
@@ -838,7 +848,7 @@ const GRAY = dcl.color(128, 128, 128);
 
 const PI = Math.PI;
 const E = Math.E;
-const TAU = PI*2;
+const TAU = PI * 2;
 
 const KEYS = {
     LEFT: 37,
@@ -938,13 +948,13 @@ dcl.complex = function (re, im) {
         mod: mod,
         con: function () {
             return dcl.complex(re, -im);
-        }, 
-        pow: function(e){
-            let the = e * arg;   
+        },
+        pow: function (e) {
+            let the = e * arg;
             let mode = pow(mod, e);
             let r = mode * cos(the);
             let i = mode * sin(the);
-            
+
             return dcl.complex(r, i);
         }
     }
