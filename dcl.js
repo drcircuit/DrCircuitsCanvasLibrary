@@ -12,6 +12,11 @@ const atan = Math.atan;
 const atan2 = Math.atan2;
 const pow = Math.pow;
 const sqrt = Math.sqrt;
+const min = Math.min;
+const max = Math.max;
+const clamp = function (n, mn, mx) {
+    return min(max(n, mn), mx);
+}
 const MOUSE = {
     pos: null,
     clickLeft: false,
@@ -299,6 +304,13 @@ dcl.vector = function (x, y, z, w) {
             var nx = x * factor + width / 2;
             var ny = y * factor + height / 2;
             return dcl.vector(nx, ny, z, 0);
+        },
+        reflect: function (normal) {
+            var d = dcl.vector(x, y, z, w);
+            var n = normal.norm();
+            var dot = n.dot(d);
+            var r = d.sub(n.smul(2 * dot));
+            return r;
         },
         add: function (vx, vy, vz, vw) {
             if (vx.isVector) {

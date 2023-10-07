@@ -1,6 +1,6 @@
 {
   "name": "drcircuitscanvaslibrary",
-  "version": "1.4.3",
+  "version": "1.4.4",
   "description": "A small library to make it easier to draw on HTML5 canvases",
   "main": "dcl.js",
   "directories": {
