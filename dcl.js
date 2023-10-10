@@ -217,6 +217,31 @@ dcl.matrix = function (m) {
                 nm.push(row);
             }
             return dcl.matrix(nm);
+        }, 
+        //Only works for rotation/translation matrices
+        quickInverse: function(){ 
+            let nm = dcl.matrix();
+            let right = dcl.vector(m[0][0], m[0][1], m[0][2], m[0][3]);
+            let up = dcl.vector(m[1][0], m[1][1], m[1][2], m[1][3]);
+            let forward = dcl.vector(m[2][0], m[2][1], m[2][2], m[2][3]);
+            let pos = dcl.vector(m[3][0], m[3][1], m[3][2], m[3][3]);
+            nm.m[0][0] = right.x;
+            nm.m[0][1] = up.x;
+            nm.m[0][2] = forward.x;
+            nm.m[0][3] = 0;
+            nm.m[1][0] = right.y;
+            nm.m[1][1] = up.y;
+            nm.m[1][2] = forward.y;
+            nm.m[1][3] = 0;
+            nm.m[2][0] = right.z;
+            nm.m[2][1] = up.z;
+            nm.m[2][2] = forward.z;
+            nm.m[2][3] = 0;
+            nm.m[3][0] = -right.dot(pos);
+            nm.m[3][1] = -up.dot(pos);
+            nm.m[3][2] = -forward.dot(pos);
+            nm.m[3][3] = 1;
+            return nm;
         }
     };
 }
@@ -266,6 +291,29 @@ dcl.matrix.projection = function (fov, aspect, znear, zfar) {
     m.m[3][3] = 0;
     return m;
 }
+
+dcl.matrix.pointAt = function (eye, target, up) {
+    let forward = target.sub(eye).norm();
+    let a = forward.mul(up.dot(forward)).norm();
+    let newUp = up.sub(a).norm();
+    let newRight = forward.cross(newUp);
+    let m = dcl.matrix();
+    m.m[0][0] = newRight.x;
+    m.m[0][1] = newRight.y;
+    m.m[0][2] = newRight.z;
+    m.m[1][0] = newUp.x;
+    m.m[1][1] = newUp.y;
+    m.m[1][2] = newUp.z;
+    m.m[2][0] = forward.x;
+    m.m[2][1] = forward.y;
+    m.m[2][2] = forward.z;
+    m.m[3][0] = eye.x;
+    m.m[3][1] = eye.y;
+    m.m[3][2] = eye.z;
+    m.m[3][3] = 1;
+    return m;
+}
+
 dcl.matrix.translation = function (x, y, z) {
     let m = dcl.matrix();
     m.m[3][0] = x;
