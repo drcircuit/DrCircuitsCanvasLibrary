@@ -293,9 +293,9 @@ dcl.matrix.projection = function (fov, aspect, znear, zfar) {
 }
 
 dcl.matrix.pointAt = function (eye, target, up) {
-    let forward = target.sub(eye).norm();
-    let a = forward.mul(up.dot(forward)).norm();
-    let newUp = up.sub(a).norm();
+    let forward = target.sub(eye);
+    let a = forward.mul(up.dot(forward));
+    let newUp = a.sub(up).norm();
     let newRight = forward.cross(newUp);
     let m = dcl.matrix();
     m.m[0][0] = newRight.x;
