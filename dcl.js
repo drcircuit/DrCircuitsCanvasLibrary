@@ -14,6 +14,9 @@ const pow = Math.pow;
 const sqrt = Math.sqrt;
 const min = Math.min;
 const max = Math.max;
+const log = Math.log;
+const exp = Math.exp;
+
 const mod = function (n, m) {
     n - floor(n / m) * m;
 }
@@ -119,7 +122,6 @@ var dcl = function () {
                 KEYB.altPressed = e.altKey;
                 KEYB.ctrlPressed = e.ctrlKey;
                 KEYB.shiftPressed = e.shiftKey;
-                //console.log(e.key);
             });
             document.addEventListener("keyup", (e) => {
                 KEYB.keyPressed = -1;
@@ -217,9 +219,9 @@ dcl.matrix = function (m) {
                 nm.push(row);
             }
             return dcl.matrix(nm);
-        }, 
+        },
         //Only works for rotation/translation matrices
-        quickInverse: function(){ 
+        quickInverse: function () {
             let nm = dcl.matrix();
             let right = dcl.vector(m[0][0], m[0][1], m[0][2], m[0][3]);
             let up = dcl.vector(m[1][0], m[1][1], m[1][2], m[1][3]);
@@ -397,6 +399,18 @@ dcl.vector = function (x, y, z, w) {
             n = n || 1;
             return dcl.vector(x / n, y / n, z / n, w / n);
         },
+        min: function (v) {
+            return dcl.vector(min(x, v.x), min(y, v.y), min(z, v.z), min(w, v.w));
+        },
+        max: function (v) {
+            return dcl.vector(max(x, v.x), max(y, v.y), max(z, v.z), max(w, v.w));
+        },
+        abs: function (){
+            return dcl.vector(abs(x), abs(y), abs(z), abs(w));
+        },
+        fract: function(){
+            return dcl.vector(fract(x), fract(y), fract(z), fract(w));
+        },
         mul: function (vx, vy, vz, vw) {
             if (vx.isVector) {
                 return dcl.vector(x * vx.x, y * vx.y, z * vx.z, w * vx.w);
@@ -432,6 +446,9 @@ dcl.vector = function (x, y, z, w) {
         norm: function () {
             return dcl.vector(x, y, z, w).div(mag());
         },
+        normal: function(v){
+            return dcl.vector(x,y,z,w).cross(v).norm();
+        },
         floor: function () {
             return dcl.vector(floor(x), floor(y), floor(z), floor(w));
         },
@@ -441,112 +458,109 @@ dcl.vector = function (x, y, z, w) {
         round: function () {
             return dcl.vector(round(x), round(y), round(z), round(w));
         },
-        fract: function (){
-            return dcl.vector(fract(x), fract(y), fract(z), fract(w));
-        },
         cos: function () {
             return dcl.vector(cos(x), cos(y), cos(z), cos(w));
         },
         sin: function () {
             return dcl.vector(sin(x), sin(y), sin(z), sin(w));
         },
-        yxz: function(){
+        yxz: function () {
             return dcl.vector(y, x, z, w);
         },
-        zxy: function(){
+        zxy: function () {
             return dcl.vector(z, x, y, w);
         },
-        xzy: function(){
+        xzy: function () {
             return dcl.vector(x, z, y, w);
         },
-        yzx: function(){
+        yzx: function () {
             return dcl.vector(y, z, x, w);
         },
-        zyx: function(){
+        zyx: function () {
             return dcl.vector(z, y, x, w);
         },
-        xyz: function(){
+        xyz: function () {
             return dcl.vector(x, y, z, w);
         },
-        xy: function(){
+        xy: function () {
             return dcl.vector(x, y);
         },
-        xz: function(){
+        xz: function () {
             return dcl.vector(x, z);
         },
-        yz: function(){
+        yz: function () {
             return dcl.vector(y, z);
         },
-        yx: function(){
+        yx: function () {
             return dcl.vector(y, x);
         },
-        zx: function(){
+        zx: function () {
             return dcl.vector(z, x);
         },
-        zy: function(){
+        zy: function () {
             return dcl.vector(z, y);
         },
-        xxy: function(){
+        xxy: function () {
             return dcl.vector(x, x, y);
         },
-        xxz: function(){
+        xxz: function () {
             return dcl.vector(x, x, z);
-        },  
-        yyx: function(){
+        },
+        yyx: function () {
             return dcl.vector(y, y, x);
         },
-        yyz: function(){
+        yyz: function () {
             return dcl.vector(y, y, z);
         },
-        zzx: function(){
+        zzx: function () {
             return dcl.vector(z, z, x);
         },
-        zzy: function(){
+        zzy: function () {
             return dcl.vector(z, z, y);
         },
-        xxx: function(){
+        xxx: function () {
             return dcl.vector(x, x, x);
         },
-        yyy: function(){
+        yyy: function () {
             return dcl.vector(y, y, y);
         },
-        zzz: function(){
+        zzz: function () {
             return dcl.vector(z, z, z);
         },
-        xyx: function(){
+        xyx: function () {
             return dcl.vector(x, y, x);
         },
-        xzx: function(){
+        xzx: function () {
             return dcl.vector(x, z, x);
         },
-        yxy: function(){
+        yxy: function () {
             return dcl.vector(y, x, y);
         },
-        yzy: function(){
+        yzy: function () {
             return dcl.vector(y, z, y);
         },
-        zxz: function(){
+        zxz: function () {
             return dcl.vector(z, x, z);
         },
-        zyz: function(){
+        zyz: function () {
             return dcl.vector(z, y, z);
         },
-        xyy: function(){
+        xyy: function () {
             return dcl.vector(x, y, y);
         },
-        xzz: function(){
+        xzz: function () {
             return dcl.vector(x, z, z);
         },
-        yxx: function(){
+        yxx: function () {
             return dcl.vector(y, x, x);
         },
-        yzz: function(){
+        yzz: function () {
             return dcl.vector(y, z, z);
         },
-        zxx: function(){
+        zxx: function () {
             return dcl.vector(z, x, x);
         },
-        zyy: function(){
+        zyy: function () {
             return dcl.vector(z, y, y);
         },
         magsqr: magsqr,
@@ -753,7 +767,6 @@ dcl.color = function (red, green, blue, alpha = 1.0) {
     };
 }
 dcl.color.hue2rgb = function (p, q, t) {
-    console.log(p, q, t);
     if (t < 0) {
         t += 1;
     }
@@ -824,11 +837,9 @@ dcl.color.fromHSB = function (hue, saturation, brightness) {
     let r, g, b;
     if (brightness === 0) {
         r = g = b = brightness;
-        console.log("Achron red ", r);
     } else {
         let q = brightness < 0.5 ? brightness * (1 + saturation) : brightness + saturation - brightness * saturation;
         let p = 2 * brightness - q;
-        console.log(q, p, hue);
         r = dcl.color.hue2rgb(p, q, hue + 1 / 3);
         g = dcl.color.hue2rgb(p, q, hue);
         b = dcl.color.hue2rgb(p, q, hue - 1 / 3);
