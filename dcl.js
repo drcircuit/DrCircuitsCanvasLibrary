@@ -411,6 +411,9 @@ dcl.vector = function (x, y, z, w) {
         fract: function(){
             return dcl.vector(fract(x), fract(y), fract(z), fract(w));
         },
+        mix: function(v, f){
+            return dcl.vector(lerp(x, v.x, f), lerp(y, v.y, f), lerp(z, v.z, f), lerp(w, v.w, f));
+        },
         mul: function (vx, vy, vz, vw) {
             if (vx.isVector) {
                 return dcl.vector(x * vx.x, y * vx.y, z * vx.z, w * vx.w);
