@@ -421,7 +421,7 @@ dcl.vector = function (x, y, z, w) {
             vx = vx || 0;
             vy = vy || 0;
             vz = vz || 0;
-            vw = vw || 0;
+            vw = vw || 1;
             return dcl.vector(x * vx, y * vy, z * vz, w * vw);
         },
         matrixmul: function (m) {
@@ -429,6 +429,12 @@ dcl.vector = function (x, y, z, w) {
             let ny = x * m.m[0][1] + y * m.m[1][1] + z * m.m[2][1] + w * m.m[3][1];
             let nz = x * m.m[0][2] + y * m.m[1][2] + z * m.m[2][2] + w * m.m[3][2];
             let nw = x * m.m[0][3] + y * m.m[1][3] + z * m.m[2][3] + w * m.m[3][3];
+
+            if(nw !== 0){
+                nx /= nw;
+                ny /= nw;
+                nz /= nw;   
+            }
             return dcl.vector(nx, ny, nz, nw);
         },
         dot: function (v) {
