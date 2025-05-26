@@ -18,7 +18,7 @@ const log = Math.log;
 const exp = Math.exp;
 
 const mod = function (n, m) {
-    n - floor(n / m) * m;
+    return n - floor(n / m) * m;
 }
 const clamp = function (n, mn, mx) {
     return min(max(n, mn), mx);
