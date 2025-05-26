@@ -24,6 +24,7 @@ jobs:
         run: '[ -n "${NPM_TOKEN}" ] && echo "NPM_TOKEN is set" || echo "NPM_TOKEN is NOT set"'
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+          
       - name: Verify NPM Token
         env:
           NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
