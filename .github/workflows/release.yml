@@ -11,10 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: Check NPM_TOKEN is set
-        run: '[ -n "${NPM_TOKEN}" ] && echo "NPM_TOKEN is set" || echo "NPM_TOKEN is NOT set"'
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      
       - name: Use Node.js
         uses: actions/setup-node@v4
         with:
@@ -23,7 +20,16 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
+      - name: Check NPM_TOKEN is set
+        run: '[ -n "${NPM_TOKEN}" ] && echo "NPM_TOKEN is set" || echo "NPM_TOKEN is NOT set"'
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Verify NPM Token
+        env:
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ~/.npmrc
+          npm whoami
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
