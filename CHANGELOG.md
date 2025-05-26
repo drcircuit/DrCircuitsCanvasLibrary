@@ -1,3 +1,10 @@
+## [1.3.10](https://github.com/drcircuit/DrCircuitsCanvasLibrary/compare/v1.3.9...v1.3.10) (2025-05-26)
+
+
+### Bug Fixes
+
+* trigger new release ([9bf13ca](https://github.com/drcircuit/DrCircuitsCanvasLibrary/commit/9bf13cace3f828746b7561a60afdec2d24919f1f))
+
 ## [1.3.9](https://github.com/drcircuit/DrCircuitsCanvasLibrary/compare/v1.3.8...v1.3.9) (2025-05-26)
 
 
