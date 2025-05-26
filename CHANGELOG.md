@@ -1,3 +1,10 @@
+## [1.3.9](https://github.com/drcircuit/DrCircuitsCanvasLibrary/compare/v1.3.8...v1.3.9) (2025-05-26)
+
+
+### Bug Fixes
+
+* **mod:** ensure mod function returns result ([1cc71bd](https://github.com/drcircuit/DrCircuitsCanvasLibrary/commit/1cc71bdd76b1c73165fe71cc5e8649fd64439c16))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
