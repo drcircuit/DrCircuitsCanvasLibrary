@@ -1,41 +1,73 @@
 {
   "name": "drcircuitscanvaslibrary",
   "version": "1.3.10",
-  "description": "A small library to make it easier to draw on HTML5 canvases",
-  "main": "dcl.js",
+  "description": "A small library to make it easier to draw on HTML5 canvases",  "main": "dist/dcl.js",
+  "module": "dist/dcl.js",
+  "types": "types/dcl.d.ts",
+  "exports": {
+    "import": "./dist/dcl.js",
+    "require": "./dist/dcl.js",
+    "types": "./types/dcl.d.ts"
+  },
   "directories": {
     "example": "examples"
-  },
-  "files": [
-    "dcl.js",
+  },  "files": [
+    "dist/",
+    "types/",
     "examples/"
   ],
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "semantic-release"
+  "type": "module",
+  "browser": {
+    "dist/dcl.js": "./dist/dcl.js"
+  },  "scripts": {
+    "build": "rollup -c",
+    "test": "node tests/run-tests.js",
+    "test:watch": "nodemon tests/run-tests.js",
+    "test:single": "node",
+    "test:coverage": "c8 node tests/run-tests.js --coverage",
+    "test:coverage-report": "c8 report",
+    "test:json": "node tests/run-tests.js --json",
+    "test:ci": "c8 node tests/run-tests.js --json --output=test-results.json",
+    "test:dev": "node tests/test-dev.js",
+    "test:analyze": "node tests/test-dev.js analyze",
+    "test:benchmark": "node tests/performance.test.js --benchmark",
+    "coverage:open": "start coverage/index.html",
+    "release": "semantic-release",
+    "prepublishOnly": "npm run build",
+    "types:check": "tsc --noEmit",
+    "types:test": "tsc examples/typescript-example.ts --noEmit --moduleResolution node --esModuleInterop"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/drcircuit/DrCircuitsCanvasLibrary.git"
-  },
-  "keywords": [
+  },  "keywords": [
     "Graphics",
     "HTML",
-    "programming"
+    "programming",
+    "canvas",
+    "typescript",
+    "types",
+    "animation",
+    "vector",
+    "math"
   ],
   "author": "Espen Sande Larsen (Working Class Hacker)",
   "license": "CC-BY-4.0",
   "bugs": {
     "url": "https://github.com/drcircuit/DrCircuitsCanvasLibrary/issues"
   },
-  "homepage": "https://github.com/drcircuit/DrCircuitsCanvasLibrary#readme",
-  "devDependencies": {
+  "homepage": "https://github.com/drcircuit/DrCircuitsCanvasLibrary#readme",  "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
     "@semantic-release/github": "^11.0.3",
     "@semantic-release/npm": "^12.0.1",
     "@semantic-release/release-notes-generator": "^14.0.3",
-    "semantic-release": "^24.2.5"
+    "@types/node": "^20.0.0",
+    "c8": "^8.0.1",
+    "jsdom": "^26.1.0",
+    "rollup": "^4.41.1",
+    "semantic-release": "^24.2.5",
+    "typescript": "^5.0.0"
   }
 }
