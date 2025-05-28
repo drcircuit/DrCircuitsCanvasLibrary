@@ -1,0 +1,19 @@
+{
+  "javascript.format.enable": true,
+  "javascript.validate.enable": true,
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit"
+  },
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "editor.defaultFormatter": "vscode.typescript-language-features",
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "*.js": "${capture}.test.js",
+    "package.json": "package-lock.json, rollup.config.js, .c8rc.json"
+  },
+"testing.automaticallyOpenPeekView": "onlyFailing",
+"[html]": {
+    "editor.defaultFormatter": "vscode.html-language-features"
+}
+}

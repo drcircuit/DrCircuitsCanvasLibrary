@@ -1,0 +1,86 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Build",
+      "type": "shell",
+      "command": "npm run build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "Run All Tests",
+      "type": "shell",
+      "command": "npm test",
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Run Test Coverage",
+      "type": "shell",
+      "command": "npm run test:coverage",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "View Coverage Report",
+      "type": "shell",
+      "command": "npm run coverage:open",
+      "presentation": {
+        "reveal": "never"
+      },
+      "dependsOn": ["Run Test Coverage"]
+    },
+    {
+      "label": "Run Performance Benchmark",
+      "type": "shell",
+      "command": "npm run test:benchmark",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Establish Performance Baselines",
+      "type": "shell",
+      "command": "node tests/performance-baseline.js establish",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Analyze Coverage",
+      "type": "shell",
+      "command": "npm run test:analyze",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      }
+    },    {
+      "label": "Show Coverage in Editor",
+      "type": "shell",
+      "command": "npm run test:coverage ; Write-Host 'Coverage ready - use Coverage Gutters: Watch command to display'",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated"
+      },
+      "problemMatcher": []
+    }
+  ]
+}
