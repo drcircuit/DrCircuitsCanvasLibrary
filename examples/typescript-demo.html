@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DCL TypeScript Example</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            background-color: #1e1e1e;
+            color: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        .info {
+            background-color: #2d2d2d;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        canvas {
+            border: 2px solid #4CAF50;
+            border-radius: 5px;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .controls {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .controls p {
+            margin: 5px 0;
+        }
+
+        code {
+            background-color: #3a3a3a;
+            padding: 2px 4px;
+            border-radius: 3px;
+            font-family: 'Courier New', monospace;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>DCL TypeScript Integration Example</h1>
+
+        <div class="info">
+            <h3>🎯 TypeScript Features Demonstrated:</h3>
+            <ul>
+                <li><strong>Type-safe initialization</strong> - ScreenOptions interface</li>
+                <li><strong>Vector operations</strong> - Full Vector interface with math operations</li>
+                <li><strong>Color management</strong> - Color interface with RGBA support</li>
+                <li><strong>Animation callbacks</strong> - Properly typed animation functions</li>
+                <li><strong>Input handling</strong> - Type-safe mouse and keyboard events</li>
+                <li><strong>Method overloading</strong> - Multiple signatures for drawing functions</li>
+                <li><strong>Math utilities</strong> - All DCL math functions with proper types</li>
+            </ul>
+        </div>
+
+        <div class="controls">
+            <p><strong>Controls:</strong></p>
+            <p>🖱️ <strong>Click</strong> anywhere to draw a random colored circle</p>
+            <p>⌨️ Press <code>SPACE</code> to change background color</p>
+            <p>👀 Watch the animated circle move in a circular pattern</p>
+        </div>
+
+        <canvas id="canvas"></canvas>
+
+        <div class="info" style="margin-top: 20px;">
+            <h3>📁 TypeScript Integration Setup:</h3>
+            <p>1. Type definitions are located in <code>types/dcl.d.ts</code></p>
+            <p>2. Package.json includes <code>"types": "types/dcl.d.ts"</code></p>
+            <p>3. Both default and named exports are supported</p>
+            <p>4. Full IntelliSense support in TypeScript-enabled editors</p>
+        </div>
+    </div>
+
+    <!-- Note: In a real TypeScript project, you would compile this to JS first -->
+    <script type="module">
+        // For demo purposes, we'll use the regular JS version
+        // In a real TypeScript project, you would compile typescript-example.ts first
+        import dcl, { vector, color } from '../dist/dcl.js';
+
+        // This would be the compiled output of typescript-example.ts
+        const animate = (time, deltaTime) => {
+            dcl.background('#000000');
+
+            const center = vector.create(dcl.width / 2, dcl.height / 2);
+            const offset = vector.create(
+                dcl.cos(time * 0.001) * 100,
+                dcl.sin(time * 0.001) * 100
+            );
+
+            const position = center.add(offset);
+
+            const circleColor = color.create(255, 100, 150, 200);
+            const strokeColor = color.create(255, 255, 255);
+
+            dcl.fill(circleColor);
+            dcl.stroke(strokeColor, 2);
+            dcl.circle(position.x, position.y, 50);
+
+            const secondPosition = vector.create(100, 100);
+            dcl.circle(secondPosition, 30);
+
+            dcl.fill('#ffffff');
+            dcl.text(`Time: ${Math.floor(time)}ms`, 10, 30);
+            dcl.text(`FPS: ${Math.round(1000 / deltaTime)}`, 10, 60);
+
+            const velocity = vector.create(2, 1);
+            const newPosition = position.add(velocity.mul(deltaTime * 0.01));
+
+            dcl.fill('#ff0000');
+            dcl.circle(newPosition, 10);
+
+            dcl.stroke('#00ff00', 1);
+            dcl.line(position, newPosition);
+        };
+
+        dcl.MOUSE.onMouseDown((x, y, button) => {
+            console.log(`Mouse clicked at (${x}, ${y}) with button ${button}`);
+            const mouseColor = color.random();
+            dcl.fill(mouseColor);
+            dcl.circle(x, y, 20);
+        });
+
+        dcl.KEYB.onKeyDown((key) => {
+            console.log(`Key pressed: ${key}`);
+            if (key === ' ') {
+                const randomBg = color.random();
+                dcl.background(randomBg);
+            }
+        });
+
+        async function main() {
+            try {
+                await dcl.init({
+                    canvas: 'canvas',
+                    width: 800,
+                    height: 600,
+                    background: 'black',
+                    pixelated: false
+                });
+
+                dcl.setupRun(animate);
+                dcl.playAnimation();
+
+                console.log('DCL TypeScript example initialized successfully!');
+                console.log(`Canvas size: ${dcl.width}x${dcl.height}`);
+
+            } catch (error) {
+                console.error('Failed to initialize DCL:', error);
+            }
+        }
+
+        main();
+    </script>
+</body>
+
+</html>

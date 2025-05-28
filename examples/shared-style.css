@@ -1,0 +1,105 @@
+/* Shared styles for DCL examples */
+body {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    box-sizing: border-box;
+}
+
+.example-container {
+    background-color: #3c3c3c;
+    padding: 20px 25px 25px 25px;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.4);
+    width: 100%;
+    max-width: 800px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+h1 {
+    color: #569cd6;
+    margin-top: 0;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 10px;
+    font-weight: 500;
+}
+
+h2 {
+    color: #9cdcfe;
+    margin-top: 30px;
+    margin-bottom: 10px;
+    border-bottom: 1px solid #555;
+    padding-bottom: 8px;
+    font-size: 1.3em;
+    font-weight: 500;
+}
+
+p.description {
+    line-height: 1.6;
+    color: #b0b0b0;
+    margin-bottom: 20px;
+    font-size: 0.95em;
+}
+
+p.description code {
+    background-color: #2a2a2a;
+    color: #ce9178;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 0.9em;
+}
+
+.canvas-wrapper {
+    margin: 25px 0;
+    display: flex;
+    justify-content: center;
+    background-color: #252526;
+    padding: 0;
+    border-radius: 8px;
+    border: 1px solid #4a4a4a;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+.canvas-wrapper canvas {
+    border-radius: 8px;
+    box-shadow: none;
+    border: none;
+    background-color: #1a1a1a;
+    width: 100% !important;
+    height: auto;
+    display: block;
+}
+
+pre {
+    background-color: #1e1e1e;
+    color: #d4d4d4;
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: Consolas, 'Courier New', monospace;
+    font-size: 14px;
+    line-height: 1.5;
+    border: 1px solid #4a4a4a;
+    margin-top: 20px;
+}
+
+/* Syntax highlighting styles */
+.code-comment { color: #6a9955; }
+.code-keyword { color: #569cd6; }
+.code-function-name { color: #dcdcaa; }
+.code-variable { color: #9cdcfe; }
+.code-literal { color: #b5cea8; }
+.code-string { color: #ce9178; }
+.code-dcl-api { color: #06c679; }
+.code-property { color: #c586c0; }

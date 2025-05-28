@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DCL - Simple Test</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
+</head>
+
+<body>
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>🔧 Simple Test</h1>
+        <div class="description">
+            Testing basic DCL functionality and constants.
+        </div>
+
+        <div id="canvas-wrapper" class="canvas-wrapper"></div>
+
+        <div id="debug-info">
+            <h2>Debug Information:</h2>
+            <div id="constants-info"></div>
+            <div id="functions-info"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+
+        function setup() {
+            dcl.screen.setBgColor("black");
+
+            // Debug information
+            const constantsDiv = document.getElementById('constants-info');
+            constantsDiv.innerHTML = `
+                <p>dcl.const available: ${dcl.const ? 'Yes' : 'No'}</p>
+                <p>dcl.const.phi: ${dcl.const ? dcl.const.phi : 'N/A'}</p>
+                <p>dcl.const.iphi: ${dcl.const ? dcl.const.iphi : 'N/A'}</p>
+            `;
+
+            const functionsDiv = document.getElementById('functions-info');
+            functionsDiv.innerHTML = `
+                <p>dcl.vector available: ${typeof dcl.vector === 'function' ? 'Yes' : 'No'}</p>
+                <p>dcl.curve available: ${dcl.curve ? 'Yes' : 'No'}</p>
+                <p>dcl.screen available: ${dcl.screen ? 'Yes' : 'No'}</p>
+            `;
+        }
+
+        function draw() {
+            // Draw a simple rotating line
+            const angle = Date.now() * 0.001;
+            const centerX = dcl.screen.width / 2;
+            const centerY = dcl.screen.height / 2;
+            const radius = 100;
+
+            dcl.curve.start(centerX, centerY);
+            dcl.curve.vertex(
+                centerX + Math.cos(angle) * radius,
+                centerY + Math.sin(angle) * radius
+            );
+            dcl.curve.stroke("cyan", 3);
+            dcl.curve.end();
+
+            // Test golden ratio if available
+            if (dcl.const && dcl.const.phi) {
+                const phi = dcl.const.phi;
+                const iphi = dcl.const.iphi;
+
+                dcl.curve.start(centerX - 50, centerY + 120);
+                dcl.curve.vertex(centerX - 50 + phi * 30, centerY + 120);
+                dcl.curve.stroke("gold", 2);
+                dcl.curve.end();
+
+                dcl.curve.start(centerX + 50, centerY + 120);
+                dcl.curve.vertex(centerX + 50 + iphi * 30, centerY + 120);
+                dcl.curve.stroke("orange", 2);
+                dcl.curve.end();
+            }
+        }
+
+        // Initialize
+        dcl.init(setup, draw, {
+            width: 600,
+            height: 400,
+            keepSquare: false,
+            gridScale: 1,
+            positioning: 'block',
+            parent: document.getElementById('canvas-wrapper')
+        });
+
+        dcl.animate();
+    </script>
+</body>
+
+</html>

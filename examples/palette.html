@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DCL - Color Palettes</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
+</head>
+
+<body>
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>🎨 Color Palettes & Animation</h1>
+        <div class="description">
+            Demonstration of DCL's built-in color palettes with cycling animation and bounce effects.
+        </div>
+
+        <div class="info-panel">
+            <h3 style="color: #569cd6; margin-top: 0;">Available Palettes</h3>
+            <div class="palette-info">
+                <div class="palette-item">
+                    <strong>EGA (64)</strong><br>
+                    Enhanced Graphics Adapter
+                </div>
+                <div class="palette-item">
+                    <strong>EGA Default (16)</strong><br>
+                    Standard 16-color EGA
+                </div>
+                <div class="palette-item">
+                    <strong>CGA (16)</strong><br>
+                    Color Graphics Adapter
+                </div>
+                <div class="palette-item">
+                    <strong>Gray (256)</strong><br>
+                    Grayscale gradient
+                </div>
+                <div class="palette-item">
+                    <strong>Fire (256)</strong><br>
+                    Fire effect colors
+                </div>
+                <div class="palette-item">
+                    <strong>Rainbow (256)</strong><br>
+                    Full spectrum rainbow
+                </div>
+            </div>
+        </div>
+
+        <div id="canvas-wrapper" class="canvas-wrapper"></div>
+
+        <div class="code-section">
+            <h2>📝 Source Code</h2>
+            <pre><code><span class="comment">// Available color palettes</span>
+<span class="keyword">const</span> <span class="variable">palettes</span> = [
+    { <span class="variable">name</span>: <span class="string">"EGA (64)"</span>, <span class="variable">arr</span>: <span class="variable">dcl</span>.<span class="variable">palette</span>.<span class="variable">ega</span> },
+    { <span class="variable">name</span>: <span class="string">"CGA (16)"</span>, <span class="variable">arr</span>: <span class="variable">dcl</span>.<span class="variable">palette</span>.<span class="variable">cga</span> },
+    { <span class="variable">name</span>: <span class="string">"Fire (256)"</span>, <span class="variable">arr</span>: <span class="variable">dcl</span>.<span class="variable">palette</span>.<span class="variable">fire</span> },
+    { <span class="variable">name</span>: <span class="string">"Rainbow (256)"</span>, <span class="variable">arr</span>: <span class="variable">dcl</span>.<span class="variable">palette</span>.<span class="variable">rainbow</span> }
+];
+
+<span class="comment">// Draw animated palette tiles</span>
+<span class="keyword">function</span> <span class="function">drawPaletteTile</span>(<span class="variable">x</span>, <span class="variable">y</span>, <span class="variable">palette</span>, <span class="variable">cycle</span>) {
+    <span class="keyword">const</span> <span class="variable">tileW</span> = <span class="number">400</span>, <span class="variable">tileH</span> = <span class="number">40</span>;
+    <span class="keyword">const</span> <span class="variable">len</span> = <span class="variable">palette</span>.<span class="variable">length</span>;
+    <span class="keyword">const</span> <span class="variable">rectW</span> = <span class="variable">tileW</span> / <span class="variable">len</span>;
+    
+    <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">i</span> = <span class="number">0</span>; <span class="variable">i</span> < <span class="variable">len</span>; <span class="variable">i</span>++) {
+        <span class="keyword">const</span> <span class="variable">idx</span> = (<span class="variable">i</span> + <span class="variable">cycle</span>) % <span class="variable">len</span>;
+        <span class="keyword">const</span> <span class="variable">color</span> = <span class="variable">palette</span>[<span class="variable">idx</span>];
+        <span class="variable">dcl</span>.<span class="function">rect</span>(<span class="variable">x</span> + <span class="variable">i</span> * <span class="variable">rectW</span>, <span class="variable">y</span>, <span class="variable">rectW</span> + <span class="number">1</span>, <span class="variable">tileH</span>, <span class="variable">color</span>);
+    }
+}
+
+<span class="comment">// Animation with cycling colors</span>
+<span class="keyword">function</span> <span class="function">draw</span>() {
+    <span class="keyword">const</span> <span class="variable">cycle</span> = <span class="function">Math.floor</span>(<span class="variable">time</span> / <span class="number">2</span>) % <span class="number">256</span>;
+    <span class="keyword">let</span> <span class="variable">y</span> = <span class="number">20</span>;
+    
+    <span class="variable">palettes</span>.<span class="function">forEach</span>(<span class="variable">palette</span> => {
+        <span class="function">drawPaletteTile</span>(<span class="number">20</span>, <span class="variable">y</span>, <span class="variable">palette</span>.<span class="variable">arr</span>, <span class="variable">cycle</span>);
+        <span class="variable">dcl</span>.<span class="function">text</span>(<span class="variable">palette</span>.<span class="variable">name</span>, <span class="number">440</span>, <span class="variable">y</span> + <span class="number">25</span>, <span class="variable">dcl</span>.<span class="variable">WHITE</span>);
+        <span class="variable">y</span> += <span class="number">60</span>;
+    });
+}</code></pre>
+        </div>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+
+        let time = 0;
+
+        // Color palette definitions
+        const palettes = [
+            { name: "EGA (64)", arr: dcl.palette.ega },
+            { name: "EGA Default (16)", arr: dcl.palette.egadef },
+            { name: "CGA (16)", arr: dcl.palette.cga },
+            { name: "Gray (256)", arr: dcl.palette.gray },
+            { name: "Fire (256)", arr: dcl.palette.fire },
+            { name: "Rainbow (256)", arr: dcl.palette.rainbow },
+            { name: "Rainbow 128", arr: dcl.palette.rainbow.bounce(128) },
+            { name: "Rainbow 64", arr: dcl.palette.rainbow.bounce(64) }
+        ];
+
+        function setup() {
+            dcl.screen.setBgColor("#111");
+        }
+
+        function drawPaletteTile(x, y, palette, cycle, bounce, size) {
+            let arr = palette;
+            if (bounce) arr = arr.bounce(arr.length);
+            if (size && arr.length !== size) {
+                arr = arr.bounce(size);
+            }
+            const len = arr.length;
+            const tileW = 400, tileH = 40;
+            const rectW = tileW / len;
+
+            for (let i = 0; i < len; i++) {
+                const idx = (i + cycle) % len;
+                const color = arr[idx];
+                dcl.rect(x + i * rectW, y, rectW + 1, tileH, color);
+            }
+        }
+
+        function draw() {
+            const cycle = Math.floor(time / 2) % 256;
+            let y = 20;            // Draw standard palettes
+            palettes.forEach((p, i) => {
+                const tileWidth = 400;
+
+                // Normal palette
+                drawPaletteTile(20, y, p.arr, 0, false);
+                dcl.text(p.name, 20 + tileWidth / 2, y + 25, dcl.WHITE, "monospace", 16);
+
+                // Bounced palette
+                drawPaletteTile(500, y, p.arr, cycle, true);
+                dcl.text(p.name + " (bounce)", 500 + tileWidth / 2, y + 25, dcl.WHITE, "monospace", 16);
+
+                y += 60;
+            });
+
+            time += 0.5;
+        }
+        // Initialize with new API
+        dcl.init(setup, draw, {
+            width: 920,
+            height: 500,
+            keepSquare: false,
+            gridScale: 1,
+            positioning: 'block',
+            parent: document.getElementById('canvas-wrapper')
+        });
+
+        dcl.animate();
+    </script>
+</body>
+
+</html>

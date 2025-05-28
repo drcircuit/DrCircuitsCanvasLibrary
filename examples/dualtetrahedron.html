@@ -1,62 +1,99 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Spinning Tetrahedron Example</title>
+    <title>DCL - Dual Tetrahedron</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
 </head>
+
 <body>
-<script>
-    var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-    scr.setBgColor("black");
-    var angle = 0;
-    var dod = {
-        vertices: [
-            dcl.vector(-1, -1, -1),
-            dcl.vector(-1, 1, 1),
-            dcl.vector(1, -1, 1),
-            dcl.vector(1, 1, -1),
-            dcl.vector(1.5, 1.5, 1.5)
-        ],
-        faces: [
-            [0, 1, 2,0],
-            [0, 3, 2,0],
-            [0, 1, 3,0],
-            [4, 1, 3,4],
-            [4, 2, 2,4],
-            [4, 1, 2,4]
-        ],
-        transformedVertices: []
-    };
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>🔺🔺 Dual Tetrahedron</h1>
+        <div class="description">
+            A compound of two tetrahedra showing geometric duality and intersecting 3D structures.
+        </div>
 
-    function draw() {
-        dod.vertices.forEach(function (v, i) {
-            dod.transformedVertices[i] = v
-                .rotateZ(45)
-                .rotateX(-35)
-                .rotateY(angle)
-                .project(scr.width, scr.height, scr.height/2, 5);
+        <div id="canvas-wrapper" class="canvas-wrapper"></div>
+
+        <div class="code-section">
+            <h2>📝 Source Code</h2>
+            <pre><code id="code-display"></code></pre>
+        </div>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+
+        let angle = 0;
+
+        // Define the sketchCode for display and execution
+        const sketchCode = `// Dual tetrahedron structure
+const dualTetrahedron = {
+    vertices: [
+        dcl.vector(-1, -1, -1),
+        dcl.vector(-1, 1, 1),
+        dcl.vector(1, -1, 1),
+        dcl.vector(1, 1, -1),
+        dcl.vector(1.5, 1.5, 1.5)  // Offset vertex for dual structure
+    ],
+    faces: [
+        [0, 1, 2, 0],  // First tetrahedron faces
+        [0, 3, 2, 0],
+        [0, 1, 3, 0],
+        [4, 1, 3, 4],  // Dual tetrahedron faces
+        [4, 2, 1, 4],  // Fixed vertex order
+        [4, 3, 2, 4]
+    ],
+    transformedVertices: []
+};
+
+function setup() {
+    dcl.screen.setBgColor("black");
+}
+
+function draw() {
+    angle += 0.02;
+
+    // Transform vertices with fixed perspective and Y rotation
+    dualTetrahedron.vertices.forEach((v, i) => {
+        dualTetrahedron.transformedVertices[i] = v
+            .rotateZ(45)    // Fixed Z rotation for perspective
+            .rotateX(-35)   // Fixed X tilt
+            .rotateY(angle) // Animated Y rotation
+            .project(dcl.screen.width, dcl.screen.height, dcl.screen.height / 2, 3);
+    });
+
+    // Draw faces in red
+    dualTetrahedron.faces.forEach(face => {
+        const startPoint = dualTetrahedron.transformedVertices[face[0]];
+        dcl.curve.start(startPoint.x, startPoint.y);
+
+        face.forEach(vertexIndex => {
+            const point = dualTetrahedron.transformedVertices[vertexIndex];
+            dcl.curve.vertex(point.x, point.y);
         });
 
-        dod.faces.forEach(function (f,fi) {
-            var a = dod.transformedVertices[f[0]];
-            dcl.curve.start(a.x, a.y);
-            f.forEach(function (v, i, arr) {
-                var p = dod.transformedVertices[v];
-                if (i === 0) {
-                    dcl.curve.start(p.x, p.y);
-                }
-                dcl.curve.vertex(p.x, p.y);
-                if (i === arr.length - 1) {
-                    dcl.curve.stroke("red",2);
-                    dcl.curve.end();
-                }
-            });
-        });
-        angle += 1;
-    }
+        dcl.curve.stroke("red", 2);
+        dcl.curve.end();
+    });
+}
 
-    dcl.animate();
-</script>
+// Initialize with new API
+dcl.init(setup, draw, {
+    width: 600,
+    height: 300,
+    positioning: 'block',
+    parent: document.getElementById('canvas-wrapper')
+});
+
+dcl.animate();`;
+
+        // Display and execute the code
+        displayAndExecuteCode(sketchCode, 'code-display');
+    </script>
 </body>
+
 </html>

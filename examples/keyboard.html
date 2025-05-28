@@ -3,93 +3,261 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Keyboard Library Examples</title>
+    <title>DCL - Keyboard Example</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
+</head>
+<style>
+    body {
+        background-color: #2d2d2d;
+        color: #e0e0e0;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        margin: 0;
+        padding: 20px;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+        box-sizing: border-box;
+    }
+
+    .example-container {
+        background-color: #3c3c3c;
+        padding: 20px 25px 25px 25px;
+        border-radius: 12px;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.4);
+        width: 100%;
+        max-width: 800px;
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    h1 {
+        color: #569cd6;
+        margin-top: 0;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #555;
+        padding-bottom: 10px;
+        font-weight: 500;
+    }
+
+    h2 {
+        color: #9cdcfe;
+        margin-top: 30px;
+        margin-bottom: 10px;
+        border-bottom: 1px solid #555;
+        padding-bottom: 8px;
+        font-size: 1.3em;
+        font-weight: 500;
+    }
+
+    p.description {
+        line-height: 1.6;
+        color: #b0b0b0;
+        margin-bottom: 20px;
+        font-size: 0.95em;
+    }
+
+    p.description code {
+        background-color: #2a2a2a;
+        color: #ce9178;
+        padding: 2px 6px;
+        border-radius: 4px;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 0.9em;
+    }
+
+    .canvas-wrapper {
+        margin: 25px 0;
+        display: flex;
+        justify-content: center;
+        background-color: #252526;
+        padding: 15px;
+        border-radius: 8px;
+        border: 1px solid #4a4a4a;
+    }
+
+    .canvas-wrapper canvas {
+        border-radius: 6px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    }
+
+    pre {
+        background-color: #1e1e1e;
+        color: #d4d4d4;
+        padding: 15px;
+        border-radius: 8px;
+        overflow-x: auto;
+        font-family: Consolas, 'Courier New', monospace;
+        font-size: 14px;
+        line-height: 1.5;
+        border: 1px solid #4a4a4a;
+        margin-top: 20px;
+    }
+
+    .code-comment {
+        color: #6a9955;
+    }
+
+    .code-keyword {
+        color: #569cd6;
+    }
+
+    .code-function-name {
+        color: #dcdcaa;
+    }
+
+    .code-variable {
+        color: #9cdcfe;
+    }
+
+    .code-literal {
+        color: #b5cea8;
+    }
+
+    .code-string {
+        color: #ce9178;
+    }
+
+    .code-dcl-api {
+        color: #06c679;
+    }
+
+    .code-property {
+        color: #c586c0;
+    }
+</style>
 </head>
 
 <body>
-    <script>
-        var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-        scr.setBgColor("black");
-        let speed = 10;
-        let minSpeed = 10;
-        let maxSpeed = 50;
-        let dampening = .02;
-        let rad = 30;
-        var c = {
-            pos: dcl.vector(scr.width / 2, scr.height / 2),
-            dir: dcl.vector(0, 0),
-            update: function () {
-                c.pos = c.pos.add(c.dir);
-            }
-        }
-        function incSpeed() {
-            speed++;
-            if (speed > maxSpeed) {
-                speed = maxSpeed;
-            }
-        }
-        function decSpeed() {
-            speed *= dampening/200;
-            if (speed < minSpeed) {
-                speed = minSpeed;
-            }
-        }
-        function draw(_, dt) {
-            if (KEYB.keyPressed === -1) {
-                if (c.dir.x < 0) {
-                    c.dir.x += dampening * 5;
-                }
-                if (c.dir.y < 0) {
-                    c.dir.y += dampening *5;
-                }
-                if (c.dir.x > 0) {
-                    c.dir.x -= dampening*5;
-                }
-                if (c.dir.y > 0) {
-                    c.dir.y -= dampening*5;
-                }
-                decSpeed();
-            }
-            if (KEYB.keyPressed === KEYS.LEFT) {
-                c.dir = dcl.vector(-speed * dt, c.dir.y);
-                incSpeed();
-            }
-            if (KEYB.keyPressed === KEYS.UP) {
-                c.dir = dcl.vector(c.dir.x, -speed * dt);
-                incSpeed();
-            }
-            if (KEYB.keyPressed === KEYS.RIGHT) {
-                c.dir = dcl.vector(speed * dt, c.dir.y);
-                incSpeed();
-            }
-            if (KEYB.keyPressed === KEYS.DOWN) {
-                c.dir = dcl.vector(c.dir.x, speed * dt);
-                incSpeed();
-            }
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>Keyboard Controls</h1>
+        <p class="description">
+            This example demonstrates keyboard input using the <code>KEYB</code> and <code>KEYS</code> objects.
+            Use the arrow keys to move the red circle around the screen. The circle wraps around the edges
+            and has momentum-based movement with acceleration and deceleration.
+        </p>
 
-            if (c.pos.x < 0 - rad) {
-                c.pos = dcl.vector(scr.width + rad, c.pos.y);
-            }
-            if (c.pos.x > scr.width + rad) {
-                c.pos = dcl.vector(0 - rad, c.pos.y);
-            }
-            if (c.pos.y < 0 - rad) {
-                c.pos = dcl.vector(c.pos.x, scr.height + rad);
-            }
-            if (c.pos.y > scr.height + rad) {
-                c.pos = dcl.vector(c.pos.x, 0 - rad);
-            }
+        <div id="canvas-wrapper" class="canvas-wrapper">
+            <!-- DCL will create and append the canvas here -->
+        </div>
 
+        <h2>JavaScript Code:</h2>
+        <pre><code id="code-display"></code></pre>
+    </div>
 
-            dcl.circle(c.pos.x, c.pos.y, rad, RED);
-            dcl.text(`DT: ${dt.toFixed(2)}`, scr.width / 2, scr.height / 2);
-            dcl.text(`POS: ${floor(c.pos.x)}, ${floor(c.pos.y)}`, scr.width / 2, scr.height / 2 + 20);
-            dcl.text(`SPEED: ${speed}`, scr.width/2, scr.height/2+40)
-            c.update();
-        };
-        // dcl.stopAnimation();
-        dcl.animate();
+    <script type="module">
+        import dcl from '../src/dcl.js';
+        const sketchCode = `
+// Global variables
+let speed = 10;
+let minSpeed = 10;
+let maxSpeed = 50;
+let dampening = 0.02;
+let rad = 30;
+
+// Circle object with position and direction
+let c = {
+    pos: null, // Will be set in setup
+    dir: dcl.vector(0, 0),
+    update: function () {
+        c.pos = c.pos.add(c.dir);
+    }
+};
+
+// Helper functions
+function incSpeed() {
+    speed++;
+    if (speed > maxSpeed) {
+        speed = maxSpeed;
+    }
+}
+
+function decSpeed() {
+    speed *= dampening / 200;
+    if (speed < minSpeed) {
+        speed = minSpeed;
+    }
+}
+
+// setup() is called once by DCL when the animation starts
+function setup() {
+    // Set background color
+    if (dcl.screen && dcl.screen.setBgColor) {
+        dcl.screen.setBgColor('black');
+    }
+      // Initialize circle position
+    c.pos = dcl.vector(dcl.screen.width / 2, dcl.screen.height / 2);
+}
+
+// draw() is called repeatedly for each frame
+function draw(_, dt) {
+    dcl.clear();
+    
+    // Handle no key pressed - apply dampening
+    if (KEYB.keyPressed === -1) {
+        if (c.dir.x < 0) c.dir.x += dampening * 5;
+        if (c.dir.y < 0) c.dir.y += dampening * 5;
+        if (c.dir.x > 0) c.dir.x -= dampening * 5;
+        if (c.dir.y > 0) c.dir.y -= dampening * 5;
+        decSpeed();
+    }
+    
+    // Handle arrow key input
+    if (KEYB.keyPressed === KEYS.LEFT) {
+        c.dir = dcl.vector(-speed * dt, c.dir.y);
+        incSpeed();
+    }
+    if (KEYB.keyPressed === KEYS.UP) {
+        c.dir = dcl.vector(c.dir.x, -speed * dt);
+        incSpeed();
+    }
+    if (KEYB.keyPressed === KEYS.RIGHT) {
+        c.dir = dcl.vector(speed * dt, c.dir.y);
+        incSpeed();
+    }
+    if (KEYB.keyPressed === KEYS.DOWN) {
+        c.dir = dcl.vector(c.dir.x, speed * dt);
+        incSpeed();
+    }
+      // Wrap around screen edges
+    if (c.pos.x < 0 - rad) {
+        c.pos = dcl.vector(dcl.screen.width + rad, c.pos.y);
+    }
+    if (c.pos.x > dcl.screen.width + rad) {
+        c.pos = dcl.vector(0 - rad, c.pos.y);
+    }
+    if (c.pos.y < 0 - rad) {
+        c.pos = dcl.vector(c.pos.x, dcl.screen.height + rad);
+    }
+    if (c.pos.y > dcl.screen.height + rad) {
+        c.pos = dcl.vector(c.pos.x, 0 - rad);
+    }
+    
+    // Draw circle and info
+    dcl.circle(c.pos.x, c.pos.y, rad, RED);
+    dcl.text(\`DT: \${dt.toFixed(2)}\`, dcl.screen.width / 2, dcl.screen.height / 2, WHITE);
+    dcl.text(\`POS: \${floor(c.pos.x)}, \${floor(c.pos.y)}\`, dcl.screen.width / 2, dcl.screen.height / 2 + 20, WHITE);
+    dcl.text(\`SPEED: \${speed}\`, dcl.screen.width / 2, dcl.screen.height / 2 + 40, WHITE);
+    
+    c.update();
+}
+
+// Initialize DCL with the new API
+dcl.init(setup, draw, {
+    width: 600,
+    height: 400,
+    keepSquare: false,
+    gridScale: 1,
+    parent: document.getElementById('canvas-wrapper'),
+    positioning: 'block'
+});
+
+dcl.animate();
+        `;
+
+        displayAndExecuteCode(sketchCode, 'code-display');
     </script>
 </body>
 

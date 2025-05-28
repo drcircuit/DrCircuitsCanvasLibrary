@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DCL - Julia Set Fractal</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
+</head>
+
+<body>
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>🌀 Julia Set Fractal</h1>
+        <div class="description">
+            Real-time animated Julia set using DCL's complex number system and orbit trap coloring technique.
+        </div>
+
+        <div class="info-panel">
+            <h3 style="color: #569cd6; margin-top: 0;">Fractal Parameters</h3>
+            <div class="fractal-info">
+                <div class="info-item">
+                    <strong>Max Iterations:</strong> 50<br>
+                    <strong>Render Size:</strong> 400×300
+                </div>
+                <div class="info-item">
+                    <strong>Animation:</strong> ~30 FPS<br>
+                    <strong>Coloring:</strong> Orbit trap
+                </div>
+                <div class="info-item">
+                    <strong>Complex Parameter:</strong> Animated circle<br>
+                    <strong>Falloff:</strong> 0.4 (smooth transitions)
+                </div>
+                <div class="info-item">
+                    <strong>Palette:</strong> Blue-teal-cyan-purple<br>
+                    <strong>Technique:</strong> Color interpolation
+                </div>
+            </div>
+        </div>
+
+        <div id="canvas-wrapper" class="canvas-wrapper"></div>
+
+        <div class="code-section">
+            <h2>📝 Source Code</h2>
+            <pre><code><span class="comment">// Julia set fractal parameters</span>
+<span class="keyword">const</span> <span class="variable">maxIter</span> = <span class="number">50</span>;
+<span class="keyword">const</span> <span class="variable">falloff</span> = <span class="number">0.4</span>; <span class="comment">// Color transition smoothness</span>
+
+<span class="comment">// Color palette for fractal</span>
+<span class="keyword">const</span> <span class="variable">palette</span> = [
+    <span class="function">dcl.color</span>(<span class="number">30</span>, <span class="number">30</span>, <span class="number">80</span>),    <span class="comment">// deep blue</span>
+    <span class="function">dcl.color</span>(<span class="number">0</span>, <span class="number">128</span>, <span class="number">192</span>),   <span class="comment">// teal</span>
+    <span class="function">dcl.color</span>(<span class="number">0</span>, <span class="number">255</span>, <span class="number">255</span>),   <span class="comment">// cyan</span>
+    <span class="function">dcl.color</span>(<span class="number">78</span>, <span class="number">0</span>, <span class="number">205</span>),    <span class="comment">// purple</span>
+    <span class="function">dcl.color</span>(<span class="number">50</span>, <span class="number">0</span>, <span class="number">55</span>)      <span class="comment">// magenta</span>
+];
+
+<span class="comment">// Animated Julia set calculation</span>
+<span class="keyword">function</span> <span class="function">drawJulia</span>(<span class="variable">time</span>) {
+    <span class="comment">// Animate complex parameter in circle</span>
+    <span class="keyword">const</span> <span class="variable">t</span> = <span class="variable">time</span> * <span class="number">0.001</span> * <span class="number">0.05</span> * <span class="number">2</span> * <span class="function">Math.PI</span>;
+    <span class="keyword">const</span> <span class="variable">cx</span> = <span class="function">Math.cos</span>(<span class="variable">t</span>) * <span class="number">0.7885</span>;
+    <span class="keyword">const</span> <span class="variable">cy</span> = <span class="function">Math.sin</span>(<span class="variable">t</span>) * <span class="number">0.7885</span>;
+    <span class="keyword">const</span> <span class="variable">c</span> = <span class="function">dcl.complex</span>(<span class="variable">cx</span>, <span class="variable">cy</span>);
+    
+    <span class="comment">// Pixel-by-pixel fractal calculation</span>
+    <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">px</span> = <span class="number">0</span>; <span class="variable">px</span> < <span class="variable">renderWidth</span>; <span class="variable">px</span>++) {
+        <span class="keyword">for</span> (<span class="keyword">let</span> <span class="variable">py</span> = <span class="number">0</span>; <span class="variable">py</span> < <span class="variable">renderHeight</span>; <span class="variable">py</span>++) {
+            <span class="keyword">let</span> <span class="variable">z</span> = <span class="function">dcl.complex</span>(<span class="variable">x</span>, <span class="variable">y</span>);
+            <span class="keyword">let</span> <span class="variable">iter</span> = <span class="number">0</span>, <span class="variable">trap</span> = <span class="variable">z</span>.<span class="variable">mod</span>;
+            
+            <span class="comment">// Julia set iteration with orbit trap</span>
+            <span class="keyword">while</span> (<span class="variable">z</span>.<span class="variable">mod</span> < <span class="number">2</span> && <span class="variable">iter</span> < <span class="variable">maxIter</span>) {
+                <span class="variable">z</span> = <span class="variable">z</span>.<span class="function">mul</span>(<span class="variable">z</span>).<span class="function">add</span>(<span class="variable">c</span>);
+                <span class="variable">trap</span> = <span class="function">Math.min</span>(<span class="variable">trap</span>, <span class="variable">z</span>.<span class="variable">mod</span>);
+                <span class="variable">iter</span>++;
+            }
+            
+            <span class="comment">// Color based on orbit trap</span>
+            <span class="keyword">const</span> <span class="variable">color</span> = <span class="function">getOrbitTrapColor</span>(<span class="variable">trap</span>, <span class="variable">iter</span>);
+        }
+    }
+}</code></pre>
+        </div>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+
+        // Fractal parameters
+        const maxIter = 50;
+        const falloff = 0.4;
+        const renderWidth = 400, renderHeight = 300;
+
+        // Color palette
+        const palette = [
+            dcl.color(30, 30, 80),    // deep blue
+            dcl.color(0, 128, 192),   // teal
+            dcl.color(0, 255, 255),   // cyan
+            dcl.color(78, 0, 205),    // purple
+            dcl.color(50, 0, 55)      // magenta
+        ];
+
+        // Off-screen buffer for fractal calculation
+        let buffer = document.createElement('canvas');
+        buffer.width = renderWidth;
+        buffer.height = renderHeight;
+        let bufCtx = buffer.getContext('2d');
+
+        let lastTime = 0;
+
+        function setup() {
+            dcl.screen.setBgColor("black");
+        }
+
+        function lerpColor(a, b, t) {
+            return dcl.color(
+                Math.round(a.r + (b.r - a.r) * t),
+                Math.round(a.g + (b.g - a.g) * t),
+                Math.round(a.b + (b.b - a.b) * t)
+            );
+        }
+
+        function getOrbitTrapColor(trap, iter, maxIter) {
+            let t = Math.min(1, trap / 2);
+            t = Math.pow(t, falloff);
+            let idx = t * (palette.length - 1);
+            let i0 = Math.floor(idx);
+            let i1 = Math.min(palette.length - 1, i0 + 1);
+            let frac = idx - i0;
+            return lerpColor(palette[i0], palette[i1], frac);
+        }
+
+        function drawJulia(time) {
+            // Animate complex parameter
+            const speed = 0.05;
+            const t = (time || 0) * 0.001 * speed * 2 * Math.PI;
+            const cx = Math.cos(t) * 0.7885;
+            const cy = Math.sin(t) * 0.7885;
+            const c = dcl.complex(cx, cy);
+
+            let img = bufCtx.getImageData(0, 0, renderWidth, renderHeight);
+            let data = img.data;
+            const aspect = renderWidth / renderHeight;
+
+            for (let px = 0; px < renderWidth; px++) {
+                for (let py = 0; py < renderHeight; py++) {
+                    // Map pixel to complex plane
+                    let x = (px - renderWidth / 2) / (renderWidth / 4) * aspect;
+                    let y = (py - renderHeight / 2) / (renderHeight / 4);
+                    let z = dcl.complex(x, y);
+
+                    let iter = 0;
+                    let trap = z.mod;
+                    while (z.mod < 2 && iter < maxIter) {
+                        z = z.mul(z).add(c);
+                        trap = Math.min(trap, z.mod);
+                        iter++;
+                    }
+
+                    let col;
+                    if (iter === maxIter) {
+                        col = dcl.color(0, 0, 0); // inside set
+                    } else {
+                        col = getOrbitTrapColor(trap, iter, maxIter);
+                    }
+
+                    let idx = 4 * (py * renderWidth + px);
+                    data[idx] = col.r;
+                    data[idx + 1] = col.g;
+                    data[idx + 2] = col.b;
+                    data[idx + 3] = 255;
+                }
+            }
+
+            bufCtx.putImageData(img, 0, 0);
+            // Upscale to main canvas
+            dcl.screen.ctx.imageSmoothingEnabled = true;
+            dcl.screen.ctx.clearRect(0, 0, dcl.screen.width, dcl.screen.height);
+            dcl.screen.ctx.drawImage(buffer, 0, 0, dcl.screen.width, dcl.screen.height);
+        }
+
+        function draw() {
+            const currentTime = performance.now();
+            if (currentTime - lastTime > 33) { // ~30 FPS
+                drawJulia(currentTime);
+                lastTime = currentTime;
+            }
+        }
+
+        // Initialize with new API
+        dcl.init(setup, draw, {
+            width: 800,
+            height: 600,
+            positioning: 'block',
+            parent: document.getElementById('canvas-wrapper')
+        });
+
+        dcl.animate();
+    </script>
+</body>
+
+</html>

@@ -1,85 +1,127 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Spinning Dodecahedron Example</title>
+    <title>DCL - Spinning Dodecahedron</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
 </head>
+
 <body>
-<script>
-    var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-    scr.setBgColor("black");
-    var angle = 0;
-    var dod = {
-        vertices: [
-            dcl.vector(dcl.const.iphi, 0, dcl.const.phi),
-            dcl.vector(-dcl.const.iphi, 0, dcl.const.phi),
-            dcl.vector(-dcl.const.iphi, 0, -dcl.const.phi),
-            dcl.vector(dcl.const.iphi, 0, -dcl.const.phi),
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>⭐ Spinning Dodecahedron</h1>
+        <div class="description">
+            A 3D dodecahedron (12-sided polyhedron) with complex geometry using golden ratio proportions.
+        </div>
 
-            dcl.vector(dcl.const.phi, dcl.const.iphi,0),
-            dcl.vector(dcl.const.phi, -dcl.const.iphi,0),
-            dcl.vector(-dcl.const.phi, -dcl.const.iphi,0),
-            dcl.vector(-dcl.const.phi, dcl.const.iphi,0),
+        <div id="canvas-wrapper" class="canvas-wrapper"></div>
 
-            dcl.vector(0, dcl.const.phi, dcl.const.iphi),
-            dcl.vector(0, dcl.const.phi, -dcl.const.iphi),
-            dcl.vector(0, -dcl.const.phi, -dcl.const.iphi),
-            dcl.vector(0, -dcl.const.phi, dcl.const.iphi),
+        <div class="code-section">
+            <h2>📝 Source Code</h2>
+            <pre><code id="code-display"></code></pre>
+        </div>
+    </div>
 
-            dcl.vector(1, 1, 1),
-            dcl.vector(1, -1, 1),
-            dcl.vector(-1, -1, 1),
-            dcl.vector(-1, 1, 1),
+    <script type="module">
+        import dcl from '../src/dcl.js';
 
-            dcl.vector(-1, 1, -1),
-            dcl.vector(1, 1, -1),
-            dcl.vector(1, -1, -1),
-            dcl.vector(-1, -1, -1)
-        ],
-        faces: [
-            [0, 12, 4, 5,13, 0],
-            [0, 1, 14, 11,13, 0],
-            [0, 12, 8, 15,1, 0],
-            [1, 15, 7, 6,14, 1],
-            [15,8, 9, 16,7, 15],
-            [11,10, 19, 6,14, 11],
-            [11,13, 5, 18,10, 11],
-            [19,10, 18, 3,2, 19],
-            [16,2, 3, 17,9, 16],
-            [9,17, 4, 12,8, 9],
+        let angle = 0;
 
-        ],
-        transformedVertices: []
-    };
+        // Define the sketchCode for display and execution
+        const sketchCode = `// Complex dodecahedron geometry using golden ratio
+const dodecahedron = {
+    vertices: [
+        dcl.vector(dcl.const.iphi, 0, dcl.const.phi),
+        dcl.vector(-dcl.const.iphi, 0, dcl.const.phi),
+        dcl.vector(-dcl.const.iphi, 0, -dcl.const.phi),
+        dcl.vector(dcl.const.iphi, 0, -dcl.const.phi),
 
-    function draw() {
-        dod.vertices.forEach(function (v, i) {
-            dod.transformedVertices[i] = v
-                .rotateY(angle)
-                .rotateZ(-angle/2)
-                .rotateX(angle*2)
-                .project(scr.width, scr.height, scr.height / 2, 3.5);
+        dcl.vector(dcl.const.phi, dcl.const.iphi, 0),
+        dcl.vector(dcl.const.phi, -dcl.const.iphi, 0),
+        dcl.vector(-dcl.const.phi, -dcl.const.iphi, 0),
+        dcl.vector(-dcl.const.phi, dcl.const.iphi, 0),
+
+        dcl.vector(0, dcl.const.phi, dcl.const.iphi),
+        dcl.vector(0, dcl.const.phi, -dcl.const.iphi),
+        dcl.vector(0, -dcl.const.phi, -dcl.const.iphi),
+        dcl.vector(0, -dcl.const.phi, dcl.const.iphi),
+
+        dcl.vector(1, 1, 1),
+        dcl.vector(1, -1, 1),
+        dcl.vector(-1, -1, 1),
+        dcl.vector(-1, 1, 1),
+
+        dcl.vector(-1, 1, -1),
+        dcl.vector(1, 1, -1),
+        dcl.vector(1, -1, -1),
+        dcl.vector(-1, -1, -1)
+    ], 
+    faces: [
+        // 12 pentagonal faces of a dodecahedron
+        [0, 1, 15, 8, 12],
+        [0, 12, 4, 5, 13],
+        [0, 13, 11, 14, 1],
+        [1, 14, 6, 7, 15],
+        [2, 3, 17, 9, 16],
+        [2, 16, 7, 6, 19],
+        [2, 19, 10, 18, 3],
+        [4, 12, 8, 9, 17],
+        [4, 17, 3, 18, 5],
+        [5, 18, 10, 11, 13],
+        [6, 14, 11, 10, 19],
+        [7, 16, 9, 8, 15]
+    ],
+    transformedVertices: []
+};
+
+function setup() {
+    dcl.screen.setBgColor("black");
+}
+
+function draw() {
+    angle += 0.01;
+
+    // Transform all vertices with complex rotation
+    dodecahedron.vertices.forEach((v, i) => {
+        dodecahedron.transformedVertices[i] = v
+            .rotateY(angle)
+            .rotateZ(-angle / 2)
+            .rotateX(angle * 2)
+            .project(dcl.screen.width, dcl.screen.height, dcl.screen.height / 2, 3.5);
+    });
+
+    // Draw each pentagon face
+    dodecahedron.faces.forEach(face => {
+        const startPoint = dodecahedron.transformedVertices[face[0]];
+        dcl.curve.start(startPoint.x, startPoint.y);
+
+        face.forEach(vertexIndex => {
+            const point = dodecahedron.transformedVertices[vertexIndex];
+            dcl.curve.vertex(point.x, point.y);
         });
-        dod.faces.forEach(function (f) {
-            var a = dod.transformedVertices[f[0]];
-            dcl.curve.start(a.x, a.y);
-            f.forEach(function (v, i, arr) {
-                var p = dod.transformedVertices[v];
-                if (i === 0) {
-                    dcl.curve.start(p.x, p.y);
-                }
-                dcl.curve.vertex(p.x, p.y);
-                if (i === arr.length - 1) {
-                    dcl.curve.stroke("white", 2);
-                    dcl.curve.end();
-                }
-            });
-        });
-        angle += 1;
-    }
 
-    dcl.animate();
-</script>
+        dcl.curve.stroke("white", 2);
+        dcl.curve.end();
+    });
+}
+
+// Initialize with new API
+dcl.init(setup, draw, {
+    width: 600,
+    height: 400,
+    keepSquare: false, 
+    gridScale: 1,
+    positioning: 'block',
+    parent: document.getElementById('canvas-wrapper')
+});
+
+dcl.animate();`;
+
+        // Display and execute the code
+        displayAndExecuteCode(sketchCode, 'code-display');
+    </script>
 </body>
+
 </html>
