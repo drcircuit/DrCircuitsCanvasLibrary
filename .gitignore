@@ -46,3 +46,8 @@ fabric.properties
 node_modules/
 *.npmrc
 .npmrc
+
+coverage/
+test-results.json
+*.bat
+*.sh

@@ -1,22 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Curve Library Examples</title>
+    <title>DCL - Curve Example</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
 </head>
+
 <body>
-<script>
-    var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-    function draw() {
-        var points = [];
-        for (var x = 0; x < scr.width; x += 100) {
-            points.push(dcl.vector(x, dcl.random(0, scr.height / 2) + scr.height / 5));
-        }
-        dcl.curve.plot(points);
-    };
-    dcl.stopAnimation();
-    dcl.animate();
-</script>
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>Curve Drawing</h1>
+        <p class="description">
+            This example demonstrates drawing a dynamic curve using <code>dcl.curve.plot()</code>.
+            The points for the curve are randomly generated. The canvas below uses a dark background.
+        </p>
+        <div id="canvas-wrapper" class="canvas-wrapper">
+            <!-- DCL will create and append the canvas here -->
+        </div>
+
+        <h2>JavaScript Code:</h2>
+        <pre><code id="code-display"></code></pre>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+
+        const sketchCode = `
+let points = []; // Array to hold curve points
+
+// setup() is called once by DCL when the animation starts
+function setup() {
+    dcl.clearEachFrame = true;
+    // Set background color using the screen object's setBgColor method
+    if (dcl.screen && dcl.screen.setBgColor) {
+        dcl.screen.setBgColor('#333740');
+    }
+}
+
+// draw() is called repeatedly for each frame
+function draw(timestamp, deltaTime) {
+    points = [];
+    for (let x = 0; x < dcl.screen.width; x += 50) {
+        points.push(vector(x, random(dcl.screen.height * 0.25, dcl.screen.height * 0.75)));
+    }
+    dcl.curve.plot(points, BLUE, 2);
+    text(
+        \`Frame: \${floor(timestamp / 30)} Points: \${points.length}\`,
+        10, 20,
+        BLACK, "Arial", 12, "left"
+    );
+}
+
+// Initialize DCL with the new API
+dcl.init(setup, draw, {
+    width: 600,    height: 300,
+    keepSquare: false,
+    gridScale: 1,
+    positioning: 'block',
+    parent: document.getElementById('canvas-wrapper')
+});
+
+dcl.animate();
+        `;
+
+        displayAndExecuteCode(sketchCode, 'code-display');
+    </script>
 </body>
+
 </html>

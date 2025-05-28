@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>MetaBalls</title>
+</head>
+
+<body style="background-color: black;">
+    <script src="../dist/dcl.js"></script>
+    <script>
+        /**
+    
+     * Created by Espen on 15.03.2017.
+    
+     */        (function () {
+
+            // Global variables for speed and timing
+            var baseSpeed = 1.0; // Global speed multiplier
+            var lastTime = 0;
+
+            // Using DCL's built-in lerp instead of custom map function
+            function map(x, minI, maxI, minO, maxO) {
+                // Normalize x to 0-1 range, then lerp to output range
+                var normalized = (x - minI) / (maxI - minI);
+                return dcl.lerp(minO, maxO, normalized);
+            }
+
+            function ball(x, y, r) {
+                var speedx = dcl.random(1, 5);
+                var speedy = dcl.random(1, 5);
+                var dimensions = {
+                    x: x,
+                    y: y,
+                    radius: r
+                }; return {
+                    space: dimensions,
+
+                    update: function (deltaTime) {
+                        // Apply delta time and base speed for smooth, frame-rate independent movement
+                        var dt = deltaTime * baseSpeed * 0.001; // Convert to seconds
+
+                        dimensions.x += speedx * dt * 100; // Scale for visible movement
+                        dimensions.y += speedy * dt * 100;
+
+                        if (dimensions.x > scr.imageData.width || dimensions.x < 0) {
+                            speedx *= -1;
+                        }
+                        if (dimensions.y > scr.imageData.height || dimensions.y < 0) {
+                            speedy *= -1;
+                        }
+                    }
+                };
+            }
+            var scr, frame;
+            var balls = [];
+
+            function setup() {
+                scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
+                frame = dcl.createBuffer(scr.width / 5, scr.height / 5);
+                scr.setBgColor(BLACK.toStyle());
+                scr.imageData = frame.buffer.createImageData(frame.canvas.width, frame.canvas.height);
+                var point = {
+                    x: dcl.random(0, scr.imageData.width),
+                    y: dcl.random(0, scr.imageData.height)
+                };
+                balls.push(ball(point.x, point.y, Math.random() * scr.imageData.width / 10 + 3)); document.body.addEventListener('keyup', function (event) {
+                    if (event.keyCode === KEYS.SPACE) {
+                        var point = {
+                            x: dcl.random(0, scr.imageData.width),
+                            y: dcl.random(0, scr.imageData.height)
+                        };
+                        balls.push(ball(point.x, point.y, Math.random() * scr.imageData.width / 10 + 3));
+                    }
+
+                    if (event.keyCode === 88) {
+                        balls.pop();
+                    }
+
+                    // Speed controls: + and - keys
+                    if (event.keyCode === 187 || event.keyCode === 107) { // + key
+                        baseSpeed = dcl.clamp(baseSpeed + 0.2, 0.0, 3.0);
+                        console.log('Speed increased to:', baseSpeed.toFixed(1));
+                    }
+                    if (event.keyCode === 189 || event.keyCode === 109) { // - key
+                        baseSpeed = dcl.clamp(baseSpeed - 0.2, 0.0, 3.0);
+                        console.log('Speed decreased to:', baseSpeed.toFixed(1));
+                    }
+
+                    draw();
+                });
+            }
+
+            // Using DCL's built-in vector distance calculation
+            function dist(x1, y1, x2, y2) {
+                var vec1 = dcl.vector(x1, y1);
+                var vec2 = dcl.vector(x2, y2);
+                return vec1.dist(vec2);
+            }
+
+            // Using DCL's built-in clamp function
+            function clamp(val, min, max) {
+                return dcl.clamp(val, min, max);
+            }
+
+            function render() {
+                var data = scr.imageData.data;
+                var width = scr.imageData.width;
+                var height = scr.imageData.height;
+                var blockSize = 1;
+
+                for (var x = 0; x < width; x += blockSize) {
+                    for (var y = 0; y < height; y += blockSize) {
+                        var color = 0;
+                        var index = (x + y * width) * 4;
+
+                        balls.forEach(function (b) {
+                            var d = dist(b.space.x, b.space.y, x, y);
+                            color += 100 * b.space.radius / d;
+                        });
+                        var h = map(clamp(color, 0, 255), 0, 255, 0.6, 0.3);
+                        var l = map(clamp(color, 0, 255), 0, 255, 0.0, 1.0);
+                        var c = hsl(h, 1, l);
+                        data[index++] = c[0];
+                        data[index++] = c[1];
+                        data[index++] = c[2];
+                        data[index++] = 255;
+                    }
+
+                }
+
+                frame.buffer.putImageData(scr.imageData, 0, 0, 0, 0, scr.width, scr.height);
+                scr.ctx.drawImage(frame.canvas, 0, 0, scr.width, scr.height);
+            }
+
+            // Using DCL's built-in HSL color conversion
+            function hsl(h, s, l) {
+                var color = dcl.color.fromHSL(h * 360, s, l);
+                return [color.r, color.g, color.b];
+            } function draw(currentTime) {
+                // Calculate delta time
+                if (!currentTime) currentTime = performance.now();
+                var deltaTime = currentTime - lastTime;
+                lastTime = currentTime;
+
+                // Cap delta time to prevent large jumps
+                if (deltaTime > 100) deltaTime = 16.67; // Cap at ~60fps equivalent
+
+                balls.forEach(function (b) {
+                    b.update(deltaTime);
+                });
+
+                render();
+                requestAnimationFrame(draw);
+
+            }
+            setup();
+            draw();
+        }
+        )();
+
+    </script>
+</body>
+
+</html>

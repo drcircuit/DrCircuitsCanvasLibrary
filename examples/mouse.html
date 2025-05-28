@@ -1,33 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Mouse Library Examples</title>
+    <title>DCL - Mouse Example</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
 </head>
+
 <body>
-<script>
-    var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-    scr.setBgColor("black");
-    function draw() {
-        let lftClr, rgtClr;
-        if(MOUSE.clickLeft){
-            lftClr = RED;
-        } else {
-            lftClr = WHITE;
-        }
-        if(MOUSE.clickRight){
-            rgtClr = BLUE;
-        } else {
-            rgtClr = WHITE;
-        }
-        dcl.rect(scr.width/2 - 125, scr.height/2 - 200, 251, 400, WHITE);
-        dcl.rect(scr.width/2 - 123, scr.height/2 - 198, 122, 150, lftClr, 1, GRAY);
-        dcl.rect(scr.width/2+2, scr.height/2 - 198, 122, 150, rgtClr, 1, GRAY);
-        dcl.text(`x:${MOUSE.pos.x} y:${MOUSE.pos.y}`, scr.width/2, scr.height/2);
-    };
-    // dcl.stopAnimation();
-    dcl.animate();
-</script>
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>Mouse Interaction</h1>
+        <p class="description">
+            This example demonstrates mouse interaction using the <code>MOUSE</code> object.
+            Click the left and right mouse buttons to see the visual feedback change colors.
+            The mouse position is displayed in real-time.
+        </p>
+        <div id="canvas-wrapper" class="canvas-wrapper">
+            <!-- DCL will create and append the canvas here -->
+        </div>
+
+        <h2>JavaScript Code:</h2>
+        <pre><code id="code-display"></code></pre>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+        const sketchCode = `
+// Global variables - use dcl.screen directly instead
+
+// setup() is called once by DCL when the animation starts
+function setup() {
+    // Set background color
+    if (dcl.screen && dcl.screen.setBgColor) {
+        dcl.screen.setBgColor('black');
+    }
+}
+
+// draw() is called repeatedly for each frame
+function draw() {
+    dcl.clear();
+    
+    let lftClr, rgtClr;
+    
+    // Change colors based on mouse button states
+    if (MOUSE.clickLeft) {
+        lftClr = RED;
+    } else {
+        lftClr = WHITE;
+    }
+    
+    if (MOUSE.clickRight) {
+        rgtClr = BLUE;
+    } else {
+        rgtClr = WHITE;
+    }
+  // Draw mouse representation
+    dcl.rect(dcl.screen.width/2 - 125, dcl.screen.height/2 - 200, 251, 400, WHITE);
+    dcl.rect(dcl.screen.width/2 - 123, dcl.screen.height/2 - 198, 122, 150, lftClr, 1, GRAY);
+    dcl.rect(dcl.screen.width/2 + 2, dcl.screen.height/2 - 198, 122, 150, rgtClr, 1, GRAY);
+    
+    // Display mouse position
+    dcl.text(\`x:\${MOUSE.pos.x} y:\${MOUSE.pos.y}\`, dcl.screen.width/2, dcl.screen.height/2, BLACK, "Arial", 16);
+}
+
+// Initialize DCL with the new API
+dcl.init(setup, draw, {
+    width: 600,
+    height: 400,    keepSquare: false,
+    gridScale: 1,
+    positioning: 'block',
+    parent: document.getElementById('canvas-wrapper'),
+    positioning: 'block'
+});
+
+dcl.animate();
+        `;
+
+        displayAndExecuteCode(sketchCode, 'code-display');
+    </script>
 </body>
+
 </html>

@@ -1,0 +1,36 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Tests",
+      "program": "${workspaceFolder}/tests/run-tests.js",
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Performance Baselines",
+      "program": "${workspaceFolder}/tests/performance-baseline.js",
+      "args": ["establish"],
+      "skipFiles": ["<node_internals>/**"]
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Single Test",
+      "program": "${file}",
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal"
+    },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "Debug Build",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "build"],
+      "skipFiles": ["<node_internals>/**"]
+    }
+  ]
+}

@@ -1,44 +1,97 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Spinning Cube Example</title>
+    <title>DCL - Spinning Triangle Example</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
+    <script src="syntax-highlighter.js"></script>
 </head>
+
 <body>
-<script>
-    var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-    scr.setBgColor("black");
-    var angle = 0;
-    var cube = {
-        vertices: [
-           dcl.vector(0,-1,0),
-           dcl.vector(-1,1,0),
-           dcl.vector(1,1,0)
-        ],
-        faces: [
-            [0,1,2,0]
-        ],
-        transformedVertices: []
-    };
+    <div class="example-container">
+        <h1>Spinning Triangle</h1>
+        <p class="description">
+            This example demonstrates 3D rotation with multiple axes using <code>rotateY()</code>,
+            <code>rotateZ()</code>, and <code>rotateX()</code> on a simple triangle. The triangle is filled using
+            <code>dcl.curve.plot()</code>.
 
-    function draw() {
-        cube.vertices.forEach(function (v, i) {
-            cube.transformedVertices[i] = v.rotateY(angle).rotateZ(-angle/2).rotateX(angle/4).project(scr.width, scr.height, scr.height / 2, 3.5);
-        });
-        cube.faces.forEach(function (f) {
-            var a = cube.transformedVertices[f[0]];
-            var points = [];
-            f.forEach((v,i)=>{
-                points.push(cube.transformedVertices[v]);
-            });
-            dcl.curve.plot(points, WHITE, 3, dcl.color(180, 200, 200));
-          
-        });
-        angle += 1;
+        </p>
+
+        <div id="canvas-wrapper" class="canvas-wrapper">
+            <!-- DCL will create and append the canvas here -->
+        </div>
+
+        <h2>JavaScript Code:</h2>
+        <pre><code id="code-display"></code></pre>
+    </div>
+
+    <script type="module">
+        import dcl from '../src/dcl.js';
+        const sketchCode = `// Global variables
+let angle = 0;
+
+// Define the triangle vertices and faces
+let triangle = {
+    vertices: [
+        dcl.vector(0, -1, 0),
+        dcl.vector(-1, 1, 0),
+        dcl.vector(1, 1, 0)
+    ],
+    faces: [
+        [0, 1, 2, 0] // Close the triangle by returning to first vertex
+    ],
+    transformedVertices: []
+};
+
+// setup() is called once by DCL when the animation starts
+function setup() {
+    // Set background color
+    if (dcl.screen && dcl.screen.setBgColor) {
+        dcl.screen.setBgColor('black');
     }
+}
 
-    dcl.animate();
-</script>
+// draw() is called repeatedly for each frame
+function draw() {
+    dcl.clear();
+    
+    // Transform vertices (rotate on multiple axes and project to 2D)
+    triangle.vertices.forEach(function (v, i) {
+        triangle.transformedVertices[i] = v
+            .rotateY(angle)
+            .rotateZ(-angle / 2)
+            .rotateX(angle / 4)
+            .project(dcl.screen.width, dcl.screen.height, dcl.screen.height / 2, 3.5);
+    });
+    
+    // Draw triangle faces
+    triangle.faces.forEach(function (f) {
+        let points = [];
+        f.forEach((v, i) => {
+            points.push(triangle.transformedVertices[v]);
+        });
+        dcl.curve.plot(points, WHITE, 3, dcl.color(180, 200, 200));
+    });
+    
+    angle += 1;
+}
+
+// Initialize DCL with the new API
+dcl.init(setup, draw, {
+    width: 600,
+    height: 400,
+    keepSquare: false,
+    gridScale: 1,
+    parent: document.getElementById('canvas-wrapper'),
+    positioning: 'block'
+});
+
+dcl.animate();`;
+
+        displayAndExecuteCode(sketchCode, 'code-display');
+    </script>
 </body>
+
 </html>

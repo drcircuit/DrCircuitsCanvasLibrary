@@ -3,39 +3,78 @@
 
 <head>
     <meta charset="UTF-8">
-    <script src="../dcl.js"></script>
-    <title>Spinning Cube Example</title>
+    <title>DCL - Shapes Example</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
 </head>
 
 <body>
-    <script>
-        var scr = dcl.setupScreen(window.innerWidth, window.innerHeight);
-        scr.setBgColor("black");
-        var angle = 0;
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>Random Shapes</h1>
+        <p class="description">
+            This example demonstrates drawing random shapes including rectangles, circles, and lines using
+            <code>dcl.rect()</code>, <code>dcl.circle()</code>, and <code>dcl.line()</code> with random colors and
+            positions.
+        </p>
+        <div id="canvas-wrapper" class="canvas-wrapper">
+            <!-- DCL will create and append the canvas here -->
+        </div>
 
+        <h2>JavaScript Code:</h2>
+        <pre><code id="code-display"></code></pre>
+    </div>
+    <script type="module">
+        import dcl from '../src/dcl.js';
 
+        const sketchCode = `
+// Global screen info - use dcl.screen directly instead
 
-        function draw() {
-            dcl.clear();
-            for (let i = 0; i < 300; i++) {
-                let x = dcl.randomi(0, scr.width);
-                let y = dcl.randomi(0, scr.height);
-                let color = dcl.color(dcl.randomi(0, 255), dcl.randomi(0, 255), dcl.randomi(0, 255));
-                if (i % 2 === 0) {
-                    dcl.rect(x,y,dcl.random(10,50), dcl.random(10,50), color);
-                } else if(i % 3 === 0){
-                    dcl.circle(x,y,dcl.random(3,20), color);
-                } else {
-                    var angle = dcl.random(0,360).toRadians();
-                    var length = dcl.random(10,200);
-                    let x2 = length * Math.sin(angle) + x;
-                    let y2 = length *   Math.cos(angle) + y;
-                    dcl.line(x,y,x2,y2,"2px",color);
-                }
-            }
+// setup() is called once by DCL when the animation starts
+function setup() {
+    // Set background color
+    if (dcl.screen && dcl.screen.setBgColor) {
+        dcl.screen.setBgColor('black');
+    }
+}
+
+// draw() is called once - this example draws static content
+function draw() {
+    dcl.clear();
+    for (let i = 0; i < 300; i++) {
+        let x = dcl.randomi(0, dcl.screen.width);
+        let y = dcl.randomi(0, dcl.screen.height);
+        let color = dcl.color(dcl.randomi(0, 255), dcl.randomi(0, 255), dcl.randomi(0, 255));
+        
+        if (i % 2 === 0) {
+            dcl.rect(x, y, dcl.random(10, 50), dcl.random(10, 50), color);
+        } else if (i % 3 === 0) {
+            dcl.circle(x, y, dcl.random(3, 20), color);
+        } else {
+            var angle = dcl.random(0, 360).toRadians();
+            var length = dcl.random(10, 200);
+            let x2 = length * Math.sin(angle) + x;
+            let y2 = length * Math.cos(angle) + y;
+            dcl.line(x, y, x2, y2, "2px", color);
         }
-        draw();
+    }
+}
 
+// Initialize DCL with the new API
+dcl.init(setup, draw, {
+    width: 600,
+    height: 400,
+    keepSquare: false,
+    gridScale: 1,
+    positioning: 'block',
+    parent: document.getElementById('canvas-wrapper')
+});
+
+// Run the draw function once (no animation needed)
+draw();
+        `;
+
+        displayAndExecuteCode(sketchCode, 'code-display');
     </script>
 </body>
 

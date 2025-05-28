@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>DCL Init Function Test</title>
+    <link rel="stylesheet" href="shared-style.css">
+    <script src="../src/dcl.js" type="module"></script>
+</head>
+
+<body>
+    <script src="syntax-highlighter.js"></script>
+    <div class="example-container">
+        <h1>DCL Init Function Test Examples</h1>
+
+        <div class="example">
+            <h2>Example 1: Config Object with Screen Options</h2>
+            <div id="canvas1" class="canvas-wrapper"></div>
+            <pre id="code1"></pre>
+        </div>
+
+        <div class="example">
+            <h2>Example 2: Separate Functions with Screen Config</h2>
+            <div id="canvas2" class="canvas-wrapper"></div>
+            <pre id="code2"></pre>
+        </div>
+
+        <div class="example">
+            <h2>Example 3: Full Config Object</h2>
+            <div id="canvas3" class="canvas-wrapper"></div>
+            <pre id="code3"></pre>
+        </div>
+
+        <script type="module">
+            import dcl from '../src/dcl.js';
+
+            // Make dcl available globally for the examples
+            window.dcl = dcl;
+
+            // Example 1: Traditional approach with screen config
+            function example1() {
+                function setup() {
+                    dcl.clear(dcl.color.BLUE);
+                    dcl.fill(dcl.color.WHITE);
+                    dcl.text("Example 1: Traditional Init", 10, 30, dcl.color.WHITE, "Arial", 16);
+                }
+
+                function draw() {
+                    dcl.fill(dcl.color.RED);
+                    dcl.circle(dcl.vector(150, 100), 20 + 10 * dcl.sin(Date.now() * 0.01));
+                }
+
+                dcl.init(setup, draw, {
+                    width: 300,
+                    height: 200,
+                    keepSquare: false,
+                    gridScale: 1,
+                    parent: document.getElementById('canvas1')
+                });
+
+                dcl.animate();
+
+                document.getElementById('code1').textContent = `
+dcl.init(setup, draw, {
+    width: 300,
+    height: 200,
+    keepSquare: false,
+    gridScale: 1,
+    parent: document.getElementById('canvas1')
+});`;
+            }
+
+            // Example 2: Config with draw function included
+            function example2() {
+                function setup() {
+                    dcl.clear(dcl.color.GREEN);
+                    dcl.fill(dcl.color.WHITE);
+                    dcl.text("Example 2: Config with Draw", 10, 30, dcl.color.WHITE, "Arial", 16);
+                }
+
+                dcl.init(setup, {
+                    draw: function () {
+                        dcl.fill(dcl.color.YELLOW);
+                        dcl.rect(dcl.vector(100, 80), 50, 40);
+                    },
+                    width: 300,
+                    height: 200,
+                    parent: document.getElementById('canvas2')
+                });
+
+                dcl.animate();
+
+                document.getElementById('code2').textContent = `
+dcl.init(setup, {
+    draw: function() {
+        dcl.fill(dcl.color.YELLOW);
+        dcl.rect(dcl.vector(100, 80), 50, 40);
+    },
+    width: 300,
+    height: 200,
+    parent: document.getElementById('canvas2')
+});`;
+            }
+
+            // Example 3: Full config object
+            function example3() {
+                dcl.init({
+                    setup: function () {
+                        dcl.clear(dcl.color.MAGENTA);
+                        dcl.fill(dcl.color.WHITE);
+                        dcl.text("Example 3: Full Config", 10, 30, dcl.color.WHITE, "Arial", 16);
+                    },
+                    draw: function () {
+                        dcl.fill(dcl.color.CYAN);
+                        const size = 15 + 10 * dcl.cos(Date.now() * 0.005);
+                        dcl.rect(dcl.vector(125, 75), size, size);
+                    },
+                    screen: {
+                        width: 300,
+                        height: 200,
+                        parent: document.getElementById('canvas3')
+                    }
+                });
+
+                dcl.animate();
+
+                document.getElementById('code3').textContent = `
+dcl.init({
+    setup: function() { /* setup code */ },
+    draw: function() { /* draw code */ },
+    screen: {
+        width: 300,
+        height: 200,
+        parent: document.getElementById('canvas3')
+    }
+});`;
+            }
+
+            // Run examples with slight delays to prevent conflicts
+            setTimeout(example1, 100);
+            setTimeout(example2, 200);
+            setTimeout(example3, 300);
+        </script>
+</body>
+
+</html>
