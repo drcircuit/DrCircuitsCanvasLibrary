@@ -1,0 +1,69 @@
+{
+  "version": "1.0.0",
+  "baselines": {
+    "color": {
+      "creation": {
+        "mean": 0.006388100000000236,
+        "p95": 0.01690000000002101,
+        "stdDev": 0.009583795093283025,
+        "threshold": 0.1
+      },
+      "conversion": {
+        "mean": 0.012286899999999604,
+        "p95": 0.025500000000022283,
+        "stdDev": 0.022616542140433415,
+        "threshold": 0.05
+      },
+      "static_methods": {
+        "mean": 0.013158199999998657,
+        "p95": 0.024900000000002365,
+        "stdDev": 0.018107407124158217,
+        "threshold": 0.2
+      }
+    },
+    "vector": {
+      "creation": {
+        "mean": 0.04985879999999691,
+        "p95": 0.08389999999997144,
+        "stdDev": 0.02701267077798961,
+        "threshold": 0.02
+      },
+      "operations": {
+        "mean": 0.07739840000000255,
+        "p95": 0.14009999999996126,
+        "stdDev": 0.032094468642432025,
+        "threshold": 0.05
+      }
+    },
+    "shapes": {
+      "drawing": {
+        "mean": 0.4654007999999983,
+        "p95": 1.0126999999999953,
+        "stdDev": 0.2811124121403389,
+        "threshold": 1
+      }
+    },
+    "animation": {
+      "frame_processing": {
+        "mean": null,
+        "p95": null,
+        "stdDev": null,
+        "threshold": 16.67
+      }
+    },
+    "matrix": {
+      "operations": {
+        "mean": 0.09014900000000102,
+        "p95": 0.1268000000000029,
+        "stdDev": 0.03137452053816892,
+        "threshold": 0.1
+      }
+    }
+  },
+  "metadata": {
+    "lastUpdated": "2025-05-28T08:30:51.824Z",
+    "nodeVersion": "v24.1.0",
+    "platform": "win32",
+    "environment": "test"
+  }
+}
