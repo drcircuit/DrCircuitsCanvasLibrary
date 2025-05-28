@@ -1,7 +1,8 @@
 {
   "name": "drcircuitscanvaslibrary",
-  "version": "1.3.10",
-  "description": "A small library to make it easier to draw on HTML5 canvases",  "main": "dist/dcl.js",
+  "version": "2.0.0",
+  "description": "A small library to make it easier to draw on HTML5 canvases",
+  "main": "dist/dcl.js",
   "module": "dist/dcl.js",
   "types": "types/dcl.d.ts",
   "exports": {
@@ -11,7 +12,8 @@
   },
   "directories": {
     "example": "examples"
-  },  "files": [
+  },
+  "files": [
     "dist/",
     "types/",
     "examples/"
@@ -19,7 +21,8 @@
   "type": "module",
   "browser": {
     "dist/dcl.js": "./dist/dcl.js"
-  },  "scripts": {
+  },
+  "scripts": {
     "build": "rollup -c",
     "test": "node tests/run-tests.js",
     "test:watch": "nodemon tests/run-tests.js",
@@ -40,7 +43,8 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/drcircuit/DrCircuitsCanvasLibrary.git"
-  },  "keywords": [
+  },
+  "keywords": [
     "Graphics",
     "HTML",
     "programming",
@@ -56,7 +60,8 @@
   "bugs": {
     "url": "https://github.com/drcircuit/DrCircuitsCanvasLibrary/issues"
   },
-  "homepage": "https://github.com/drcircuit/DrCircuitsCanvasLibrary#readme",  "devDependencies": {
+  "homepage": "https://github.com/drcircuit/DrCircuitsCanvasLibrary#readme",
+  "devDependencies": {
     "@semantic-release/changelog": "^6.0.3",
     "@semantic-release/commit-analyzer": "^13.0.1",
     "@semantic-release/git": "^10.0.1",
